@@ -1,0 +1,14 @@
+# 是否启用定时任务
+cron: true
+# 回测结束日期 格式为2024-01-01
+# end_date: "2024-01-01"
+end_date: 
+
+# 推送配置
+push:
+  # 是否启用推送
+  enable: true  
+  # 微信推送UID
+  wxpusher_uid: "UID_T8KlGW8JS3efxTMIvGLjGrpER7LX"
+  # 微信推送Token
+  wxpusher_token: "AT_h1RLQJJUNHhqjCnhmVWaw4g8qfAud1ab"

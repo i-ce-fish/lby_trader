@@ -1,0 +1,280 @@
+# -*- encoding: UTF-8 -*-
+
+from datetime import datetime
+import talib as tl
+import pandas as pd
+import logging
+
+from utils import DateHelper
+import wx_pusher
+
+# 检查股票收盘价是否高于55日均线,  而且低于10均线, 
+def check_ea(stock, data, end_date=None, ema_days=20):
+    # 数据量不足，返回False
+    if data is None or len(data) < ema_days:
+        logging.debug("{0}:样本小于{1}天...\n".format(stock, ema_days))
+        return False
+
+    # 过滤次新股
+    if check_new(stock, data, end_date):
+        return False
+
+    # 计算移动平均线
+    ema_tag = 'ema' + str(ema_days)
+    #  20日指数移动平均线
+    data[ema_tag] = tl.EMA(data['收盘'],ema_days)
+    data['ma10'] = tl.MA(data['收盘'],10)
+
+    
+    # 如果结束日期小于当前日期, 则只取结束日期之前的数据
+    if end_date is not None:
+        if end_date <  datetime.now().strftime("%Y-%m-%d"):
+            mask = (data['日期'] <= DateHelper.str_to_date(end_date).date())
+            data = data.loc[mask]
+
+    # 获取结束日期的收盘价和均线价格
+    last_close = data.iloc[-1]['收盘']
+    last_ema = data.iloc[-1][ema_tag]
+    last_ma10 = data.iloc[-1]['ma10']
+    # 判断收盘价是否大于20日均线, 且小于10日均线, 不满足则返回false
+    if last_close < last_ema or last_close > last_ma10:
+        return False
+
+    # 获取最近20天数据
+    recent_data = data.tail(20)  
+    # 所有天的成交额都要大于3亿
+    volume_condition = ((recent_data['成交额']/ 100000000) >= 0.5).all()  
+    # 所有天的换手率都要大于1%
+    turnover_condition = (recent_data['换手率'] >= 0.5).all()  
+    if not volume_condition or not turnover_condition:
+        return False
+
+    # 计算20天内收盘价最高价格的那天
+    # 找到最高价的那天
+    max_price_idx = recent_data['收盘'].idxmax()
+    # 获取最高价那天之后的数据
+    recent_after_max_data = data.loc[max_price_idx:]
+    # 判断高点回撤反弹
+    recent_data_count = recent_after_max_data.shape[0]
+    rsi_rebound = check_rsi_rebound(data,recent_data_count)
+    rebound = check_rebound(recent_after_max_data)
+    if rsi_rebound or rebound:
+        return False
+   
+    # 判断缩量
+
+    print(f"选中{data['股票代码'][0]}")
+    return True
+
+
+# 方法2：通过RSI指标判断
+def check_rsi_rebound(data,recent_data_count, period=6, threshold=5):
+    """
+    通过RSI指标判断是否有反弹
+    period: RSI周期
+    threshold: RSI反弹阈值
+    """
+    # 计算RSI
+    data['rsi'] = tl.RSI(data['收盘'], timeperiod=period)
+    # 获取最近的RSI值
+    recent_rsi = data['rsi'].tail(recent_data_count)
+    # 找到最小值及其位置
+    rsi_min = recent_rsi.min()
+    min_idx = recent_rsi.idxmin()  # 获取最小值的索引
+    
+    # 获取最小值之后的数据
+    rsi_after_min = recent_rsi.loc[min_idx:]
+    
+    # 如果最小值在最后一天，直接返回False
+    if min_idx == recent_rsi.index[-1]:
+        return False
+    
+    # 计算反弹幅度
+    rsi_rebound = rsi_after_min.max() - rsi_min
+    
+    # 判断是否反弹
+    if rsi_rebound > threshold:
+        return True
+        
+    return False
+
+# 方法1：通过高点回撤判断
+def check_rebound(data, threshold=0.05):
+    """
+    检查高点之后是否有反弹
+    prices: 价格序列
+    threshold: 反弹幅度阈值（默认5%）
+    """
+    prices = data['收盘'].values
+    max_price = prices[0]  # 初始最高价
+    min_after_max =  prices[0]  # 最高价后的最低价
+    for price in  prices[1:]:
+        if price > max_price:
+            # 创新高，重置最低价
+            max_price = price
+            min_after_max = price
+        else:
+            # 更新最低价
+            min_after_max = min(min_after_max, price)
+            # 检查从最低点是否有超过threshold的反弹
+            current_rebound = (price - min_after_max) / min_after_max
+            if current_rebound > threshold:
+                return True
+    return False
+    
+
+# 量比大于3.0
+def check_continuous_volume(code_name, data, end_date=None, threshold=60, window_size=3):
+    stock = code_name[0]
+    name = code_name[1]
+    data['vol_ma5'] = pd.Series(tl.MA(data['成交量'].values, 5), index=data.index.values)
+    if end_date is not None:
+        mask = (data['日期'] <= end_date)
+        data = data.loc[mask]
+    data = data.tail(n=threshold + window_size)
+    if len(data) < threshold + window_size:
+        logging.debug("{0}:样本小于{1}天...\n".format(code_name, threshold+window_size))
+        return False
+
+    # 最后一天收盘价
+    last_close = data.iloc[-1]['收盘']
+    # 最后一天成交量
+    last_vol = data.iloc[-1]['成交量']
+
+    data_front = data.head(n=threshold)
+    data_end = data.tail(n=window_size)
+
+    mean_vol = data_front.iloc[-1]['vol_ma5']
+
+    for index, row in data_end.iterrows():
+        if float(row['成交量']) / mean_vol < 3.0:
+            return False
+
+    msg = "*{0} 量比：{1:.2f}\n\t收盘价：{2}\n".format(code_name, last_vol/mean_vol, last_close)
+    logging.debug(msg)
+    return True
+
+
+# 收盘价高于N日均线
+def check_ma(code_name, data, end_date=None, ma_days=250):
+    if data is None or len(data) < ma_days:
+        logging.debug("{0}:样本小于{1}天...\n".format(code_name, ma_days))
+        return False
+
+    ma_tag = 'ma' + str(ma_days)
+    data[ma_tag] = pd.Series(tl.MA(data['收盘'].values, ma_days), index=data.index.values)
+
+    if end_date is not None:
+        mask = (data['日期'] <= end_date)
+        data = data.loc[mask]
+
+    last_close = data.iloc[-1]['收盘']
+    last_ma = data.iloc[-1][ma_tag]
+    if last_close > last_ma:
+        return True
+    else:
+        return False
+
+
+# 上市日小于60天
+def check_new(code_name, data, end_date=None, threshold=60):
+    size = len(data.index)
+    if size < threshold:
+        return True
+    else:
+        return False
+
+
+# 量比大于2
+# 例如：
+#   2017-09-26 2019-02-11 京东方A
+#   2019-03-22 浙江龙盛
+#   2019-02-13 汇顶科技
+#   2019-01-29 新城控股
+#   2017-11-16 保利地产
+def check_volume(code_name, data, end_date=None, threshold=60):
+    if len(data) < threshold:
+        logging.debug("{0}:样本小于250天...\n".format(code_name))
+        return False
+    data['vol_ma5'] = pd.Series(tl.MA(data['成交量'].values, 5), index=data.index.values)
+
+    if end_date is not None:
+        mask = (data['日期'] <= end_date)
+        data = data.loc[mask]
+    if data.empty:
+        return False
+    p_change = data.iloc[-1]['p_change']
+    if p_change < 2 \
+            or data.iloc[-1]['收盘'] < data.iloc[-1]['开盘']:
+        return False
+    data = data.tail(n=threshold + 1)
+    if len(data) < threshold + 1:
+        logging.debug("{0}:样本小于{1}天...\n".format(code_name, threshold))
+        return False
+
+    # 最后一天收盘价
+    last_close = data.iloc[-1]['收盘']
+    # 最后一天成交量
+    last_vol = data.iloc[-1]['成交量']
+
+    amount = last_close * last_vol * 100
+
+    # 成交额不低于2亿
+    if amount < 200000000:
+        return False
+
+    data = data.head(n=threshold)
+
+    mean_vol = data.iloc[-1]['vol_ma5']
+
+    vol_ratio = last_vol / mean_vol
+    if vol_ratio >= 2:
+        msg = "*{0}\n量比：{1:.2f}\t涨幅：{2}%\n".format(code_name, vol_ratio, p_change)
+        logging.debug(msg)
+        return True
+    else:
+        return False
+
+
+
+# 检查股票是否突破指定区间内最高价
+def check_breakthrough(code_name, data, end_date=None, threshold=30):
+    # 初始化最高价为0
+    max_price = 0
+    
+    # 如果指定了结束日期，只取该日期之前的数据
+    if end_date is not None:
+        mask = (data['日期'] <= end_date)
+        data = data.loc[mask]
+    
+    # 取最后threshold+1天的数据
+    data = data.tail(n=threshold+1)
+    
+    # 数据量不足，返回False
+    if len(data) < threshold + 1:
+        logging.debug("{0}:样本小于{1}天...\n".format(code_name, threshold))
+        return False
+
+    # 获取最后一天的收盘价和开盘价
+    last_close = float(data.iloc[-1]['收盘'])  # iloc[-1]表示最后一行
+    last_open = float(data.iloc[-1]['开盘'])
+
+    # 获取倒数第二天的收盘价
+    data = data.head(n=threshold)
+    second_last_close = data.iloc[-1]['收盘']
+
+    # 遍历数据找出最高价
+    for index, row in data.iterrows():
+        if row['收盘'] > max_price:
+            max_price = float(row['收盘'])
+
+    # 判断条件：
+    # 1. 最后一天收盘价大于最高价
+    # 2. 最高价大于倒数第二天收盘价
+    # 3. 最高价大于最后一天开盘价
+    # 4. 最后一天涨幅大于6%
+    if last_close > max_price > second_last_close and max_price > last_open \
+            and last_close / last_open > 1.06:
+        return True
+    else:
+        return False
