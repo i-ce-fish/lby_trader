@@ -6,42 +6,122 @@ import pandas as pd
 import logging
 
 from utils import DateHelper
-import wx_pusher
+#  筛选活跃股(一阳四线)
+# @param stock 股票代码
+# @param data 股票日线数据
+# @param end_date 结束日期
+def check_hyg(stock, df, end_date=None):
+    # 过滤次新股
+    if check_new(stock, df, end_date):
+        return False
+    """
+    检查股票是否满足选股条件(一阳四线选股)
+    df: DataFrame，需要包含 'open' 和 'close' 列
+    """
+    # 计算各均线
+    df['MA5'] = df['收盘'].rolling(window=5).mean()
+    df['MA10'] = df['收盘'].rolling(window=10).mean()
+    df['MA20'] = df['收盘'].rolling(window=20).mean()
+    df['MA30'] = df['收盘'].rolling(window=30).mean()
+    
+    # 计算开盘价低于均线条件
+    df['below_ma'] = (df['开盘'] < df['MA5']) & \
+               (df['开盘'] < df['MA10']) & \
+               (df['开盘'] < df['MA20']) & \
+               (df['开盘'] < df['MA30'])
+    
+    # 计算收盘价高于均线条件
+    df['above_ma'] = (df['收盘'] > df['MA5']) & \
+               (df['收盘'] > df['MA10']) & \
+               (df['收盘'] > df['MA20']) & \
+               (df['收盘'] > df['MA30'])
+    # 计算当天是否出现均线穿越信号（开盘价低于均线且收盘价高于均线）
+    df['cross_ma'] = df['below_ma'] & df['above_ma']
+    # 判断最近5天内是否存在均线穿越信号
+    # 1. rolling(window=5) 取最近5天的数据
+    # 2. sum() 计算5天内穿越信号的出现次数
+    # 3. > 0 表示只要5天内出现过一次穿越信号就为True
+    df['cross_ma_exist'] = df['cross_ma'].rolling(window=3).sum() > 0
+    
+    # 均线多头排列条件
+    df['MA_trend'] = (df['MA5'] > df['MA10']) & (df['MA10'] > df['MA30'])
+    
+    # 最终XG条件
+    df['yx_signal'] = df['cross_ma_exist'] & df['MA_trend']
+    # 判断最后一天是否满足均线多头排列
+    result = df['yx_signal'].iloc[-1]
+    if not  result:
+        return False
+    last_5_days = df.iloc[-5:]
+    # 找出最近5天内满足穿越条件的具体日期
+    cross_day = last_5_days[last_5_days['cross_ma']]
+    cross_day_index = cross_day.index[0]
+    cross_day_info = cross_day.iloc[0]
+
+    # 放量2倍以上
+    after_cross_day = last_5_days.loc[cross_day_index:]
+    # 阳线后的天数
+    after_cross_day_count = after_cross_day.shape[0]
+    # 阳线后成交额总和
+    after_cross_day_volume = after_cross_day['成交额'].sum()    
+    # 阳线前成交额总和
+    before_cross_day = df.loc[cross_day.index[0]-after_cross_day_count:cross_day.index[0]]
+    before_cross_day_volume = before_cross_day['成交额'].sum()
+    if after_cross_day_volume  < before_cross_day_volume * 2:
+        return False
+
+    # 涨幅未兑现,
+    #  涨幅小于阳线收盘价的6%, 并且收盘价在阳线均价之上
+    last_close = df.iloc[-1]['收盘']
+    cross_day_close = cross_day_info['收盘']
+    # 阳线当日均价计算
+    cross_day_avg = (cross_day_info['最高'] + cross_day_info['最低'] + cross_day_info['收盘']) / 3
+    if (last_close - cross_day_close) / cross_day_close > 0.06 or last_close < cross_day_avg:
+        return False
+    df['strategy'] = '活跃股'
+    print(f"策略：活跃股，选中{df['股票代码'][0]}")
+    return True
+
+
 
 # 检查股票收盘价是否高于55日均线,  而且低于10均线, 
-def check_ea(stock, data, end_date=None, ema_days=20):
+# @param stock 股票代码
+# @param data 股票日线数据
+# @param end_date 结束日期
+# @param ema_days 均线天数
+def check_ea(stock, df, end_date=None, ema_days=20):
     # 数据量不足，返回False
-    if data is None or len(data) < ema_days:
+    if df is None or len(df) < ema_days:
         logging.debug("{0}:样本小于{1}天...\n".format(stock, ema_days))
         return False
 
     # 过滤次新股
-    if check_new(stock, data, end_date):
+    if check_new(stock, df, end_date):
         return False
 
     # 计算移动平均线
     ema_tag = 'ema' + str(ema_days)
     #  20日指数移动平均线
-    data[ema_tag] = tl.EMA(data['收盘'],ema_days)
-    data['ma10'] = tl.MA(data['收盘'],10)
+    df[ema_tag] = tl.EMA(df['收盘'],ema_days)
+    df['ma10'] = tl.MA(df['收盘'],10)
 
     
     # 如果结束日期小于当前日期, 则只取结束日期之前的数据
     if end_date is not None:
         if end_date <  datetime.now().strftime("%Y-%m-%d"):
-            mask = (data['日期'] <= DateHelper.str_to_date(end_date).date())
-            data = data.loc[mask]
+            mask = (df['日期'] <= DateHelper.str_to_date(end_date).date())
+            df = df.loc[mask]
 
     # 获取结束日期的收盘价和均线价格
-    last_close = data.iloc[-1]['收盘']
-    last_ema = data.iloc[-1][ema_tag]
-    last_ma10 = data.iloc[-1]['ma10']
+    last_close = df.iloc[-1]['收盘']
+    last_ema = df.iloc[-1][ema_tag]
+    last_ma10 = df.iloc[-1]['ma10']
     # 判断收盘价是否大于20日均线, 且小于10日均线, 不满足则返回false
     if last_close < last_ema or last_close > last_ma10:
         return False
 
     # 获取最近20天数据
-    recent_data = data.tail(20)  
+    recent_data = df.tail(20)  
     # 所有天的成交额都要大于3亿
     volume_condition = ((recent_data['成交额']/ 100000000) >= 0.5).all()  
     # 所有天的换手率都要大于1%
@@ -53,31 +133,31 @@ def check_ea(stock, data, end_date=None, ema_days=20):
     # 找到最高价的那天
     max_price_idx = recent_data['收盘'].idxmax()
     # 获取最高价那天之后的数据
-    recent_after_max_data = data.loc[max_price_idx:]
+    recent_after_max_data = df.loc[max_price_idx:]
     # 判断高点回撤反弹
     recent_data_count = recent_after_max_data.shape[0]
-    rsi_rebound = check_rsi_rebound(data,recent_data_count)
+    rsi_rebound = check_rsi_rebound(df,recent_data_count)
     rebound = check_rebound(recent_after_max_data)
     if rsi_rebound or rebound:
         return False
    
     # 判断缩量
-
-    print(f"选中{data['股票代码'][0]}")
+    df['strategy'] = '周期4'
+    print(f"周期4选中{df['股票代码'][0]}")
     return True
 
 
 # 方法2：通过RSI指标判断
-def check_rsi_rebound(data,recent_data_count, period=6, threshold=5):
+def check_rsi_rebound(df,recent_data_count, period=6, threshold=5):
     """
     通过RSI指标判断是否有反弹
     period: RSI周期
     threshold: RSI反弹阈值
     """
     # 计算RSI
-    data['rsi'] = tl.RSI(data['收盘'], timeperiod=period)
+    df['rsi'] = tl.RSI(df['收盘'], timeperiod=period)
     # 获取最近的RSI值
-    recent_rsi = data['rsi'].tail(recent_data_count)
+    recent_rsi = df['rsi'].tail(recent_data_count)
     # 找到最小值及其位置
     rsi_min = recent_rsi.min()
     min_idx = recent_rsi.idxmin()  # 获取最小值的索引

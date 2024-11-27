@@ -505,39 +505,43 @@ def get_watch_history(code=None, strategy=None):
             return []
           
 if __name__ == "__main__":
-    with SqliteDB() as db:
-        # 删除旧表
-        drop_tables = [
-            "DROP TABLE IF EXISTS stock_watch"
-        ]
-        for sql in drop_tables:
-            db.execute(sql)
+     with SqliteDB() as db:
+        # 删除id大于26的记录
+        db.execute("DELETE FROM stock_watch WHERE id > 26")
+         
+    # with SqliteDB() as db:
+    #     # 删除旧表
+    #     drop_tables = [
+    #         "DROP TABLE IF EXISTS stock_watch"
+    #     ]
+    #     for sql in drop_tables:
+    #         db.execute(sql)
 
-        # 创建股票监听表
-        create_watch_table = """
-        CREATE TABLE IF NOT EXISTS stock_watch (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            code TEXT NOT NULL,           -- 股票代码
-            name TEXT NOT NULL,           -- 股票名称
-            current_price REAL,           -- 最新价格
-            strategy TEXT NOT NULL,       -- 策略名称
-            watch_status TEXT NOT NULL,   -- 监听状态：监听中/已停止/已触发
-            create_time TIMESTAMP,        -- 创建时间
-            update_time TIMESTAMP        -- 更新时间
-        )
-        """
-        db.cursor.execute(create_watch_table)
-        db.conn.commit()
+    #     # 创建股票监听表
+    #     create_watch_table = """
+    #     CREATE TABLE IF NOT EXISTS stock_watch (
+    #         id INTEGER PRIMARY KEY AUTOINCREMENT,
+    #         code TEXT NOT NULL,           -- 股票代码
+    #         name TEXT NOT NULL,           -- 股票名称
+    #         current_price REAL,           -- 最新价格
+    #         strategy TEXT NOT NULL,       -- 策略名称
+    #         watch_status TEXT NOT NULL,   -- 监听状态：监听中/已停止/已触发
+    #         create_time TIMESTAMP,        -- 创建时间
+    #         update_time TIMESTAMP        -- 更新时间
+    #     )
+    #     """
+    #     db.cursor.execute(create_watch_table)
+    #     db.conn.commit()
         
-    add_watch_stock('000001', '平安银行', 10.5, '测试策略')
-    update_watch_status('000001', '测试策略', '已触发', 11.0)
-    # 添加股票监听
-    add_watch_stock('000001', '平安银行', 10.5, '测试策略')
-    # 更新监听状态
+    # add_watch_stock('000001', '平安银行', 10.5, '测试策略')
+    # update_watch_status('000001', '测试策略', '已触发', 11.0)
+    # # 添加股票监听
+    # add_watch_stock('000001', '平安银行', 10.5, '测试策略')
+    # # 更新监听状态
 
-    # 获取所有监听中的股票
-    watching_stocks = get_watching_stocks()
+    # # 获取所有监听中的股票
+    # watching_stocks = get_watching_stocks()
 
-    # 获取监听历史
-    print(watching_stocks)
+    # # 获取监听历史
+    # print(watching_stocks)
 

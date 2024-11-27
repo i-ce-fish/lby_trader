@@ -24,6 +24,7 @@ class Strategy(StrategyTemplate):
     long_watch_stocks = ["159605","510300","159949"]
     # 短期监听股票
     short_watch_stocks = ["300459","603529"]
+    # todo 活跃股选股
     # 从数据库获取监听股票
     sql_watch_stocks = [stock.code for stock in get_watching_stocks()]
     watch_stocks = short_watch_stocks + long_watch_stocks + sql_watch_stocks

@@ -24,6 +24,7 @@ class SignalParams:
 # 信号参数常量定义
 BUY_POINT_PARAMS = SignalParams(threshold=90, percent=0.05, column='dz')     # 峰值回撤参数
 SELL_POINT_PARAMS = SignalParams(threshold=0, percent=0.05, column='dz')    # 波谷反弹参数
+#  todo  小幅拉升时回撤不够准确
 QUICK_PULLUP_PARAMS = SignalParams(threshold=3, percent=0.03, column='sp')    # 拉升信号参数
 
 

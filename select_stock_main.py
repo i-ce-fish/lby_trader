@@ -4,7 +4,6 @@ import utils
 import logging
 import work_flow
 import settings
-import time
 from db.sqlite_utils import init_db
 from scheduler.task_scheduler import TaskScheduler
 
@@ -31,19 +30,19 @@ init_db()
 # 更新股票数据库 + 基金数据库, todo    定时任务
 
 # 创建定时任务管理器
-scheduler = None
-if settings.config['cron']:
-    scheduler = TaskScheduler(logging)
-    scheduler.start()
-else:
-    print("不配置定时任务, 直接执行")
-    work_flow.update_listen_stocks()
+# scheduler = None
+# if settings.config['cron']:
+#     scheduler = TaskScheduler(logging)
+#     scheduler.start()
+# else:
+print("不配置定时任务, 直接执行")
+work_flow.update_listen_stocks()
 
 
 # 保持主线程运行
-try:
-    while settings.config['cron']:
-        time.sleep(60)
-except (KeyboardInterrupt, SystemExit):
-    if scheduler:
-        scheduler.stop()
+# try:
+#     while settings.config['cron']:
+#         time.sleep(60)
+# except (KeyboardInterrupt, SystemExit):
+#     if scheduler:
+#         scheduler.stop()
