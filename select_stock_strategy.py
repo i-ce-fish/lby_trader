@@ -92,36 +92,43 @@ def check_hyg(stock, df, end_date=None):
     cross_day_avg = (cross_day_info['最高'] + cross_day_info['最低'] + cross_day_info['收盘']) / 3
     if (last_close - cross_day_close) / cross_day_close > trigger_threshold:
         print(f"涨幅已兑现{stock}")
+        logging.info(f"涨幅已兑现{stock}")
         return False
 
     # 过滤跌破阳线均价
     if last_close < cross_day_avg:
         print(f"跌破阳线均价{stock}")
+        logging.info(f"跌破阳线均价{stock}")
         return False
 
     # 过滤大阳线当天涨幅小于阈值
     if cross_day_info['涨跌幅'] <  cross_day_threshold:
         print(f"大阳线当天涨幅小于{cross_day_threshold}%{stock}")
+        logging.info(f"大阳线当天涨幅小于{cross_day_threshold}%{stock}")
         return False
 
     # 过滤阳线后出现大阴线 任意一天开收幅大于阈值
     after_cross_day['开收幅'] = (after_cross_day['收盘'] - after_cross_day['开盘']) / after_cross_day['开盘']
     if (after_cross_day['开收幅'] < big_drop_threshold).any():
         print(f"阳线后出现大阴线{stock}")
+        logging.info(f"阳线后出现大阴线{stock}")
         return False
     # 过滤大阳线后, 任意一天涨停
     if (after_cross_day[1:]['涨跌幅'] > 10).any():
         print(f"大阳线后涨停任意一天{stock}")
+        logging.info(f"大阳线后涨停任意一天{stock}")
         return False
     
     # 过滤50天前到7天前,最高收盘价超过当前价5%以上
     max_price = df['收盘'][:-7].rolling(window=50).max()
     if max_price.iloc[-1] > last_close * previous_highest_threshold:
         print(f"50天前到7天前,最高收盘价超过当前价5%以上{stock}")
+        logging.info(f"50天前到7天前,最高收盘价超过当前价5%以上{stock}")
         return False
     
     df['strategy'] = '活跃股'
     print(f"策略：活跃股，选中{stock}")
+    logging.info(f"策略：活跃股，选中{stock}")
     return True
 
 
@@ -189,6 +196,7 @@ def check_ea(stock, df, end_date=None, ema_days=20):
     # 判断缩量
     df['strategy'] = '周期4'
     print(f"周期4选中{df['股票代码'][0]}")
+    logging.info(f"周期4选中{df['股票代码'][0]}")
     return True
 
 

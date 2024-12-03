@@ -52,37 +52,11 @@ def update_listen_stocks():
     
     logging.info('更新stock-watching')
 
-    # 个股资金流 同花顺  
-    fund_flow_data = get_fund_flow()
-    
-    # todo 
-    # 数组排序, 接口根据阶段涨跌幅排序
-    subset = fund_flow_data[['序号',
-                             '股票代码', 
-                             '股票简称', 
-                             '最新价']]
-
-
-    # 遍历subset,如果股票代码不完整,  则从数据库获取
-    # 处理接口股票代码不正确的情况
-    def fix_code(row):
-        code = row['股票代码']
-        if len(str(code)) != 6:
-            info = get_stock_info_by_name(row['股票简称'])
-            if info:
-                row['股票代码'] = info[0]
-                return row
-            else:
-                # 删除row
-                logging.info("股票代码不正确, 且无法找到:{}".format(row['股票简称']))
-                return None
-        return row
-
-    # 过滤掉None
-    subset = subset.apply(fix_code, axis=1).dropna()
+    all_data = get_all_stocks()
+    subset = all_data[['序号','代码', '名称', '最新价']]
 
     # 转换为元组列表 
-    stocks = [(str(tuple(x)[1]), tuple(x)[2]) for x in subset.values]
+    stocks = [(tuple(x)[1], tuple(x)[2]) for x in subset.values]
     # 获取股票数据  
     stocks_data = data_fetcher.run(stocks)
     end = settings.config['end_date']
@@ -105,8 +79,20 @@ def update_listen_stocks():
         time  = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         wx_pusher.wx_push('选股: '+hyg_msg+ '-----'+zq4_msg+ ' '+time)
 
+#  todo  后期可能要加上科创板
+@handle_api_error(default_return=[])
+def get_all_stocks():
+    """获取所有主板+创业板股票数据"""
+    all_data = ak.stock_zh_a_spot_em()
+    if all_data is None:
+        logging.error("获取所有股票数据失败")
+        return []
+    # 使用正则表达式过滤掉北交所(8/9开头)、科创板(688开头)和其他特殊板块(4开头)的股票
+    exclude_pattern = '^(8|9|4|688)'
+    all_data = all_data[~all_data['代码'].str.match(exclude_pattern)]
+    return all_data
 
-
+# @deprecated 同花顺接口数据股票代码缺失严重,  不再使用, 且股票名称中空格/英文的处理与东财不一致
 @handle_api_error(default_return=[])
 def get_fund_flow():
     """获取资金流向数据, 20日排行, 阶段涨幅降序"""
@@ -114,7 +100,29 @@ def get_fund_flow():
     if fund_flow_data is None:
         logging.error("获取资金流向数据失败")
         return []
-    return fund_flow_data
+    # 遍历subset,如果股票代码不完整,  则从数据库获取
+    subset = fund_flow_data[['序号',
+                             '股票代码', 
+                             '股票简称', 
+                             '最新价']]
+    # 处理接口股票代码不正确的情况
+    def fix_code(row):
+        code = row['股票代码']
+        if len(str(code)) != 6:
+            info = get_stock_info_by_name(row['股票简称'])
+            if info:
+                row['股票代码'] = info[0]
+                return row
+            else:
+                # 删除row
+                logging.info("股票代码不正确, 且无法找到:{}".format(row['股票简称']))
+                return None
+        return row
+    # 过滤掉None
+    subset = subset.apply(fix_code, axis=1).dropna()
+    return subset
+
+
 
 # 策略公共函数
 def check_enter(end_date=None, strategy_fun=enter.check_volume):
