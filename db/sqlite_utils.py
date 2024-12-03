@@ -410,7 +410,10 @@ def get_trade_history(code=None):
         return db.select('trades')
 
 
-
+def get_watching_or_stopped_stock(code: str):
+    with SqliteDB() as db:
+        sql = "SELECT * FROM stock_watch WHERE code = ? AND (watch_status = '监听中' OR watch_status = '停止监听')"
+        return db.query_one(sql, (code,))
 
 def add_watch_stock_by_user(watch_stock: WatchStock):
     with SqliteDB() as db:
@@ -428,6 +431,7 @@ def add_watch_stock_by_user(watch_stock: WatchStock):
         try:
             # 使用属性值列表作为参数
             db.execute(sql, tuple(attrs.values()))
+            return True
         except Exception as e:
             # 可以根据需要添加具体的错误处理逻辑
             raise Exception(f"添加观察股票失败: {str(e)}")
@@ -444,12 +448,12 @@ def add_watch_stock(code, name, current_price, strategy):
             # 检查是否存在"监听中"的记录
             check_sql = """
             SELECT * FROM stock_watch 
-            WHERE code = ? AND strategy = ? AND watch_status = '监听中'
+            WHERE code = ? AND strategy = ? AND (watch_status = '监听中' OR watch_status = '停止监听')
             """
             existing = db.query_one(check_sql, (code, strategy))
             
             if existing:
-                logging.warning(f"股票{code}的{strategy}策略已在监听中")
+                logging.warning(f"股票{code}的{strategy}策略已在监听中/停止监听")
                 return False
             
             # 添加新记录
@@ -467,7 +471,7 @@ def add_watch_stock(code, name, current_price, strategy):
         except Exception as e:
             logging.error(f"添加股票监听失败: {e}")
             return False
-
+#  todo remove
 def update_watch_status(code, strategy, status, current_price=None):
     """
     更新股票监听状态

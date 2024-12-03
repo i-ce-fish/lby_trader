@@ -13,6 +13,9 @@ class DbService:
         self.config = config
         self.database = database
 
+    def get_watching_or_stopped_stock(self, code: str) -> WatchStocks:
+        return sqlite_utils.get_watching_or_stopped_stock(code)
+
     def get_watch_stocks(self,watching:str, user: str | None = None) -> List[WatchStock]:
         return sqlite_utils.get_watch_stocks(watching, user)
 

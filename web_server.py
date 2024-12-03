@@ -121,9 +121,13 @@ async def update_watch_stock_status(id: int = Body(...), status: str = Body(...)
 
 @app.post("/api/addWatchStock")
 async def add_watch_stock(code: str = Body(...),strategy: str = Body(default='活跃股')):
+    # 是否已经存在监听中/停止监听的股票
+    if db_service.get_watching_or_stopped_stock(code):
+        return {"message": "已经存在监听中/停止监听的股票"}
     stock_info = get_stock_info(code)
     watch_stock = WatchStock(code=code, name=stock_info.name, current_price=stock_info.price, strategy=strategy, watch_status='监听中',create_time=datetime.now(), update_time=datetime.now())
-    return db_service.add_watch_stock(watch_stock)
+    insert_result = db_service.add_watch_stock(watch_stock)
+    return {"message": "添加成功" , "data": insert_result}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)

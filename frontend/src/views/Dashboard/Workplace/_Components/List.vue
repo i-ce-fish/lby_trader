@@ -4,19 +4,9 @@
             <div class='card-header flex justify-between items-center'>
                 <div>&nbsp;</div>
                 <div>
-                    <el-link
-                        type='primary'
-                        :underline='false'
-                        href='javascript:;'
-                        @click='loadStocks'
-                    >
+                    <el-link type='primary' :underline='false' href='javascript:;' @click='loadStocks'>
                         刷新</el-link>
-                    <el-link
-                        type='primary'
-                        :underline='false'
-                        href='javascript:;'
-                        @click='addNewStock'
-                    >
+                    <el-link type='primary' :underline='false' href='javascript:;' @click='addNewStock'>
                         添加</el-link>
                 </div>
             </div>
@@ -25,14 +15,18 @@
             <el-table-column type='index' label='序号' width='50' />
             <el-table-column prop='name' label='名称' width='120'>
                 <template #default='scope'>
-                    <el-link type='primary' :underline='false' :href='`https://stockpage.10jqka.com.cn/${scope.row.code}`' target='_blank'>{{ scope.row.name }}</el-link>
+                    <el-link type='primary' :underline='false'
+                        :href='`https://stockpage.10jqka.com.cn/${scope.row.code}`' target='_blank'>{{ scope.row.name
+                        }}</el-link>
                 </template>
             </el-table-column>
-            <el-table-column prop='code' label='代码' sortable width='100'/>
+            <el-table-column prop='code' label='代码' sortable width='100' />
             <el-table-column prop="todo" label='涨跌幅' width='100' sortable>
                 <template #default='scope'>
                     <div style='display: flex; align-items: center'>
-                        <span style='margin-left: 10px' :class='addClass(scope.row)'>{{ scope.row['now'] - scope.row['open'] > 0 ? "+":"" }}{{ (scope.row['now'] - scope.row['open']).toFixed(2) }} ({{ scope.row['涨跌(%)'] }}%)</span>
+                        <span style='margin-left: 10px' :class='addClass(scope.row)'>{{ scope.row['now'] -
+                            scope.row['open'] > 0 ? "+":"" }}{{ (scope.row['now'] - scope.row['open']).toFixed(2) }} ({{
+                            scope.row['涨跌(%)'] }}%)</span>
                     </div>
                 </template>
             </el-table-column>
@@ -42,36 +36,32 @@
             <el-table-column prop='create_time' label='自选日期' width='220' sortable />
             <el-table-column fixed='right' label='操作'>
                 <template #default='scope'>
-                    <el-button type='text' size='small' @click='handleUpdateWatchStockStatus(scope.row.id, "监听中")'>继续监听</el-button>
-                    <el-button type='text' size='small' @click='handleUpdateWatchStockStatus(scope.row.id, "停止监听")'>停止监听</el-button>
-                    <el-button type='text' size='small' @click='handleUpdateWatchStockStatus(scope.row.id, "结束监听")'>结束监听</el-button>
+                    <el-button type='text' size='small'
+                        @click='handleUpdateWatchStockStatus(scope.row.id, "监听中")'>继续监听</el-button>
+                    <el-button type='text' size='small'
+                        @click='handleUpdateWatchStockStatus(scope.row.id, "停止监听")'>停止监听</el-button>
+                    <el-button type='text' size='small'
+                        @click='handleUpdateWatchStockStatus(scope.row.id, "结束监听")'>结束监听</el-button>
                 </template>
             </el-table-column>
         </el-table>
     </el-card>
-    
-    <el-dialog
-        v-model='show'
-        title='新增监听股票'
-        width='30%'
-        :before-close='handleClose'
-    >
+
+    <el-dialog v-model='show' title='新增监听股票' width='30%' :before-close='handleClose'>
         <el-form ref='ruleForm' label-position='right' label-width='80px' :rules='rules'>
             <el-form-item class='mb-6 -ml-20' prop='code'>
-                <el-input v-model='newStock' maxlength='6' minlength='6' placeholder='请输入股票代码' prefix-icon='el-icon-user' />
+                <el-input v-model='newStock' maxlength='6' minlength='6' placeholder='请输入股票代码'
+                    prefix-icon='el-icon-user' />
             </el-form-item>
         </el-form>
         <template #footer>
             <span class='dialog-footer'>
                 <el-button @click='show = false'>取消</el-button>
-                <el-button
-                    type='primary'
-                    @click='addWatchStock'
-                >添加</el-button>
+                <el-button type='primary' @click='addWatchStock'>添加</el-button>
             </span>
         </template>
     </el-dialog>
-        
+
     <!-- <el-card shadow='hover' class='mb-2'>
         <template #header>
             <div class='card-header flex justify-between items-center'>
@@ -123,12 +113,12 @@ const show = ref(false)
 
 // 方法定义
 const loadStocks = async () => {
-    const res = await getWatchStocksApi({watch_status: props.type})
+    const res = await getWatchStocksApi({ watch_status: props.type })
     stocks.value = res.data
 }
 
 const addWatchStock = async () => {
-    const res = await addWatchStockApi(newStock.value)
+    const res = await addWatchStockApi({ code: newStock.value })
     if (res.data.data) {
         ElNotification({
             title: '提示',
@@ -140,7 +130,7 @@ const addWatchStock = async () => {
     } else {
         ElNotification({
             title: '提示',
-            message: '添加失败'
+            message: res.data.message
         })
     }
 }
@@ -179,7 +169,7 @@ const remove = async (code: string) => {
 }
 
 const handleUpdateWatchStockStatus = async (id: string, status: string) => {
-    await updateWatchStockStatus({id, status})
+    await updateWatchStockStatus({ id, status })
     await loadStocks()
 }
 
@@ -216,21 +206,19 @@ defineExpose({
 </script>
 
 <style lang='postcss' scoped>
-
 .cell-red {
     color: red;
 }
 
-.cell-green{
+.cell-green {
     color: green;
 }
 
 .el-link {
-  margin-right: 8px;
+    margin-right: 8px;
 }
 
 .el-link .el-icon--right.el-icon {
-  vertical-align: text-bottom;
+    vertical-align: text-bottom;
 }
-
 </style>
