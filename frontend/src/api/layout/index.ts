@@ -7,7 +7,34 @@ const api = {
     getUser: '/api/me',
     getRouterList: '/api/route',
     getStocks: '/api/stocks',
-    publickey: '/api/User/Publickey'
+    publickey: '/api/User/Publickey',
+    getWatchStocks: '/api/getWatchStocks',
+    addWatchStock: '/api/addWatchStock',
+    updateWatchStockStatus: '/api/updateWatchStockStatus'
+}
+
+export function updateWatchStockStatus(data:any): Promise<AxiosResponse<any>> {
+    return request({
+        url: api.updateWatchStockStatus,
+        method: 'post',
+        data
+    })
+}
+
+export function getWatchStocksApi(params:any): Promise<AxiosResponse<any>> {
+    return request({
+        url: api.getWatchStocks,
+        method: 'get',
+        params
+    })
+}
+
+export function addWatchStockApi(data:any): Promise<AxiosResponse<any>> {
+    return request({
+        url: api.addWatchStock,
+        method: 'post',
+        data
+    })
 }
 
 export interface loginParam {

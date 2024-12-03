@@ -40,9 +40,10 @@ class TaskScheduler:
         # 每小时执行一次
         self.scheduler.add_job(
             self.update_listening_stocks_job,
-            # CronTrigger(hour='*'),  # 每小时执行
-            # id='hourly_job',
-            CronTrigger(hour='*/3'),  # 每3小时执行
+            CronTrigger(
+                day_of_week='mon-fri', 
+                hour='15',             
+                minute='5'),           
             id='update_listening_stocks_job',
             max_instances=1,        # 最大实例数为1，防止任务重复执行
             coalesce=True          # 合并错过的任务

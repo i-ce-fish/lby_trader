@@ -11,13 +11,14 @@ from talib_ext_cpp.tdx_indicator_base import WINNER  as winner2
 
 def test():
     settings.init()
-    # print(check_zq4())   
+    # 周期4选股
+    print(check_zq4())   
     # 11
     # stocks =   ["000066","603529","002428","601117"]
     # for code in stocks:
     #     check_update_stock_info(code)
     # 22
-    check_winner()
+    # check_winner()
 
 def check_winner():
     # 更有代表性的测试数据
@@ -41,7 +42,7 @@ def my_winner(data, price_series=None):
 # 测试周期4选股
 def check_zq4():
     # 获取股票数据  
-    stock = (55, '000099', '中信海直')
+    stock = (55, '002611', '东方精工')
     stock_data = data_fetcher.run([stock])
     result = check_ea(stock, stock_data[stock],  settings.config['end_date'])
     return result

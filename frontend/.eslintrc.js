@@ -29,6 +29,7 @@ module.exports = {
         }],
         'vue/singleline-html-element-content-newline': 'off',
         'vue/multiline-html-element-content-newline':'off',
+        'vue/no-multiple-template-root':'off', 
         'vue/html-indent': ['error', 4],
         indent: ['error', 4], // 4行缩进
         'vue/script-indent': ['error', 4],

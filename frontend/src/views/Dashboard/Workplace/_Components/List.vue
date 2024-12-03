@@ -1,20 +1,8 @@
 <template>
-    <!-- <list type='card' :data='list'>
-        <template #header>
-            <div class='card-header flex justify-between items-center'>
-                <span>我的关注</span>
-                <el-link
-                    type='primary'
-                    :underline='false'
-                    href='javascript:;'
-                >全部</el-link>
-            </div>
-        </template>
-    </list> -->
     <el-card shadow='hover' class='mb-2'>
         <template #header>
             <div class='card-header flex justify-between items-center'>
-                <span>关注</span>
+                <div>&nbsp;</div>
                 <div>
                     <el-link
                         type='primary'
@@ -34,29 +22,29 @@
             </div>
         </template>
         <el-table :data='stocks' border style='width: 100%;'>
-            <el-table-column fixed prop='name' label='名称' />
-            <el-table-column prop='code' label='代码' sortable />
-            <el-table-column prop='now' label='当前价格' sortable />
-            <el-table-column label='涨跌幅' width='180' sortable>
+            <el-table-column type='index' label='序号' width='50' />
+            <el-table-column prop='name' label='名称' width='120'>
+                <template #default='scope'>
+                    <el-link type='primary' :underline='false' :href='`https://stockpage.10jqka.com.cn/${scope.row.code}`' target='_blank'>{{ scope.row.name }}</el-link>
+                </template>
+            </el-table-column>
+            <el-table-column prop='code' label='代码' sortable width='100'/>
+            <el-table-column prop="todo" label='涨跌幅' width='100' sortable>
                 <template #default='scope'>
                     <div style='display: flex; align-items: center'>
                         <span style='margin-left: 10px' :class='addClass(scope.row)'>{{ scope.row['now'] - scope.row['open'] > 0 ? "+":"" }}{{ (scope.row['now'] - scope.row['open']).toFixed(2) }} ({{ scope.row['涨跌(%)'] }}%)</span>
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column label='做T价格' width='180'>
+            <el-table-column prop='watch_status' label='监听状态' width='120' sortable />
+            <el-table-column prop='strategy' label='策略' width='120' sortable />
+            <el-table-column prop='todo' label='自选收益' width='120' sortable />
+            <el-table-column prop='create_time' label='自选日期' width='220' sortable />
+            <el-table-column fixed='right' label='操作'>
                 <template #default='scope'>
-                    <div style='display: flex; align-items: center'>
-                        <span style='margin-left: 10px'>卖1：{{ scope.row['t_price'][0].toFixed(2) }}<br>卖2：{{ scope.row['t_price'][1].toFixed(2) }}<br>买1：{{ scope.row['t_price'][2].toFixed(2) }}<br>买2：{{ scope.row['t_price'][3].toFixed(2) }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column prop='成交量(手)' label='成交量（手)' sortable />
-            <el-table-column prop='总市值' label='总市值' sortable />
-            <el-table-column prop='市盈(静)' label='市盈(静)' sortable />
-            <el-table-column fixed='right' label=''>
-                <template #default='scope'>
-                    <el-button type='text' size='small' @click='remove(scope.row.code)'>删除</el-button>
+                    <el-button type='text' size='small' @click='handleUpdateWatchStockStatus(scope.row.id, "监听中")'>继续监听</el-button>
+                    <el-button type='text' size='small' @click='handleUpdateWatchStockStatus(scope.row.id, "停止监听")'>停止监听</el-button>
+                    <el-button type='text' size='small' @click='handleUpdateWatchStockStatus(scope.row.id, "结束监听")'>结束监听</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -64,7 +52,7 @@
     
     <el-dialog
         v-model='show'
-        title='新增关注股票'
+        title='新增监听股票'
         width='30%'
         :before-close='handleClose'
     >
@@ -97,119 +85,133 @@
         </list>
     </el-card> -->
 </template>
-<script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
-import { IList } from '/@/components/List/index.vue'
-import { addStock, getStocks, IStocks, removeWatchStock } from '/@/api/layout/index'
+<script setup lang="ts">
+import { onMounted, onUnmounted, reactive, ref, defineProps, watchEffect } from 'vue'
+import { addWatchStockApi, getWatchStocksApi, IStocks, removeWatchStock, updateWatchStockStatus } from '/@/api/layout/index'
 import { ElNotification, ElMessageBox, ElMessage } from 'element-plus'
-// import OpenWindow from '/@/components/OpenWindow/index.vue'
 
-let autoReloadTimer:any = null
 
-export default defineComponent({
-    components: {
-        // OpenWindow
-    },
-    setup() {
-        const rules = reactive({
-            code: [
-                {
-                    required: true,
-                    message: '请输入股票代码',
-                    trigger: 'blur'
-                },
-                {
-                    min: 6,
-                    max: 6,
-                    message: '股票代码为6位',
-                    trigger: 'blur'
-                }
-            ]
-        })
-        const stocks = ref<IStocks[]>([])
-        const newStock = ref<string>('')
-        const show = ref(false)
-        const loadStocks = async() => {
-            const res = await getStocks()
-            stocks.value = res.data
+// 接收prop:type
+const props = defineProps<{
+    type: string
+}>()
+
+
+// 响应式状态声明
+const rules = reactive({
+    code: [
+        {
+            required: true,
+            message: '请输入股票代码',
+            trigger: 'blur'
+        },
+        {
+            min: 6,
+            max: 6,
+            message: '股票代码为6位',
+            trigger: 'blur'
         }
+    ]
+})
 
-        const addWatchStock = async() => {
-            const res = await addStock(newStock.value)
+
+const stocks = ref<IStocks[]>([])
+const newStock = ref<string>('')
+const show = ref(false)
+
+
+
+// 方法定义
+const loadStocks = async () => {
+    const res = await getWatchStocksApi({watch_status: props.type})
+    stocks.value = res.data
+}
+
+const addWatchStock = async () => {
+    const res = await addWatchStockApi(newStock.value)
+    if (res.data.data) {
+        ElNotification({
+            title: '提示',
+            message: '添加成功'
+        })
+        show.value = false
+        newStock.value = ''
+        loadStocks()
+    } else {
+        ElNotification({
+            title: '提示',
+            message: '添加失败'
+        })
+    }
+}
+
+const remove = async (code: string) => {
+    ElMessageBox.confirm(
+        `确认删除关注股票${code}`,
+        'Warning',
+        {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning'
+        }
+    )
+        .then(async () => {
+            const res = await removeWatchStock(code)
             if (res.data.data) {
-                ElNotification({
-                    title: '提示',
-                    message: '添加成功'
+                ElMessage({
+                    type: 'success',
+                    message: 'Delete completed'
                 })
-                show.value = false
-                newStock.value = ''
                 loadStocks()
             } else {
                 ElNotification({
                     title: '提示',
-                    message: '添加失败'
+                    message: '删除失败'
                 })
             }
-        }
+        })
+        .catch(() => {
+            ElMessage({
+                type: 'info',
+                message: 'Delete canceled'
+            })
+        })
+}
 
-        const remove = async(code:string) => {
-            ElMessageBox.confirm(
-                `确认删除关注股票${code}`,
-                'Warning',
-                {
-                    confirmButtonText: 'OK',
-                    cancelButtonText: 'Cancel',
-                    type: 'warning'
-                }
-            )
-                .then(async() => {
-                    const res = await removeWatchStock(code)
-                    if (res.data.data) {
-                        ElMessage({
-                            type: 'success',
-                            message: 'Delete completed'
-                        })
-                        loadStocks()
-                    } else {
-                        ElNotification({
-                            title: '提示',
-                            message: '删除失败'
-                        })
-                    } 
-                })
-                .catch(() => {
-                    ElMessage({
-                        type: 'info',
-                        message: 'Delete canceled'
-                    })
-                })
-        }
+const handleUpdateWatchStockStatus = async (id: string, status: string) => {
+    await updateWatchStockStatus({id, status})
+    await loadStocks()
+}
 
+const addNewStock = () => {
+    show.value = true
+}
 
-        return {
-            edit: (item: IList) => console.log(item),
-            show,
-            stocks,
-            newStock,
-            rules,
-            remove,
-            loadStocks,
-            addWatchStock,
-            addNewStock: () => {
-                show.value = true
-            },
-            addClass : (row: any) => {
-                return row['涨跌(%)'] > 0 ? 'cell-red' : 'cell-green'
-            }
-        }
-    },
-    mounted() {
-        this.loadStocks()
-        // autoReloadTimer = window.setInterval(this.loadStocks, 5000)
-    },
-    unmounted() {
-        clearInterval(autoReloadTimer)
-    }
+const addClass = (row: any) => {
+    return row['涨跌(%)'] > 0 ? 'cell-red' : 'cell-green'
+}
+
+const handleClose = () => {
+    show.value = false
+}
+// 生命周期钩子
+let autoReloadTimer: any = null
+
+onMounted(() => {
+    loadStocks()
+    // autoReloadTimer = window.setInterval(loadStocks, 5000)
+})
+
+onUnmounted(() => {
+    clearInterval(autoReloadTimer)
+})
+// 监听props:type
+watchEffect(() => {
+    loadStocks()
+})
+// 暴露给模板的属性和方法
+defineExpose({
+    loadStocks
 })
 </script>
 

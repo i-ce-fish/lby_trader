@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "debug: web_server",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "web_server.py",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "debug: lby_trader_main",
             "type": "debugpy",
             "request": "launch",

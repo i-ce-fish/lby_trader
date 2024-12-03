@@ -1,5 +1,7 @@
 from typing import List
 
+from db import sqlite_utils
+from db.db_class import WatchStock
 from web.database import Database
 from web.models import WatchStocks, User, Strategies
 from web.settings import APISettings
@@ -11,9 +13,14 @@ class DbService:
         self.config = config
         self.database = database
 
-    def get_watch_stocks(self, user: str) -> List[WatchStocks]:
-        session = self.database.get_session()
-        return session.query(WatchStocks).all()
+    def get_watch_stocks(self,watching:str, user: str | None = None) -> List[WatchStock]:
+        return sqlite_utils.get_watch_stocks(watching, user)
+
+    def update_watch_stock_status(self, id: int, status: str) -> WatchStocks:
+        return sqlite_utils.update_watch_stock_status(id, status)
+
+    def add_watch_stock(self, watch_stock: WatchStock) -> WatchStocks:
+        return sqlite_utils.add_watch_stock_by_user(watch_stock)   
 
     def watch_stock(self, code: str, name: str, close: float) -> WatchStocks:
         session = self.database.get_session()

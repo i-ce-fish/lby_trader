@@ -61,7 +61,7 @@ class EventEngine:
         """注册事件处理函数监听"""
         if handler not in self.__handlers[event_type]:
             self.__handlers[event_type].append(handler)
-            print(f"事件引擎：注册事件处理器 - 类型：{event_type}")
+            # print(f"事件引擎：注册事件处理器 - 类型：{event_type}")
 
     def unregister(self, event_type, handler):
         """注销事件处理函数"""

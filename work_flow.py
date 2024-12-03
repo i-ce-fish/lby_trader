@@ -1,5 +1,6 @@
 # -*- encoding: UTF-8 -*-
 
+from itertools import islice
 import data_fetcher
 import settings
 import select_stock_strategy as enter
@@ -85,8 +86,10 @@ def update_listen_stocks():
     # 获取股票数据  
     stocks_data = data_fetcher.run(stocks)
     end = settings.config['end_date']
-    # 筛选周期4）
-    zq4_results =  dict(filter(check_enter(end_date=end, strategy_fun=enter.check_ea), stocks_data[:100].items()))
+    # 筛选周期4
+    head_dict = dict(islice(stocks_data.items(), 100))
+    zq4_results =  dict(filter(check_enter(end_date=end, strategy_fun=enter.check_ea), head_dict.items()))
+    # 筛选活跃股
     hyg_results = dict(filter(check_enter(end_date=end, strategy_fun=enter.check_hyg), stocks_data.items()))
     results = {**zq4_results, **hyg_results}
     # 保存到数据库
@@ -102,8 +105,6 @@ def update_listen_stocks():
         time  = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         wx_pusher.wx_push('选股: '+hyg_msg+ '-----'+zq4_msg+ ' '+time)
 
-# todo 筛选活跃股
-# todo 
 
 
 @handle_api_error(default_return=[])

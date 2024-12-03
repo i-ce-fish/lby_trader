@@ -16,7 +16,7 @@
     "vue": "^3.2.20"
   },
   "license": "MIT",
-  "repository": "https://github.com/hsiangleev/element-plus-admin",
+  "repository": "https://ginpthub.com/hsiangleev/element-plus-admin",
   "devDependencies": {
     "@babel/preset-env": "^7.12.11",
     "@testing-library/jest-dom": "^5.11.8",

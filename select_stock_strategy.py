@@ -4,13 +4,25 @@ from datetime import datetime
 import talib as tl
 import pandas as pd
 import logging
-
+# 关闭 SettingWithCopyWarning 警告
+pd.options.mode.chained_assignment = None
 from utils import DateHelper
 #  筛选活跃股(一阳四线)
 # @param stock 股票代码
 # @param data 股票日线数据
 # @param end_date 结束日期
 def check_hyg(stock, df, end_date=None):
+    # 大阳线当天涨幅阈值(%)
+    cross_day_threshold = 8
+    # 兑现涨幅阈值(.)
+    trigger_threshold = 0.1
+    # 大阴线跌幅阈值(.)
+    big_drop_threshold = -0.05
+    # 以前的最高点涨幅阈值(%)
+    previous_highest_threshold = 1.1
+    # 均线穿越窗口期
+    cross_ma_window = 4 
+
     # 过滤次新股
     if check_new(stock, df, end_date):
         return False
@@ -41,7 +53,7 @@ def check_hyg(stock, df, end_date=None):
     # 1. rolling(window=5) 取最近5天的数据
     # 2. sum() 计算5天内穿越信号的出现次数
     # 3. > 0 表示只要5天内出现过一次穿越信号就为True
-    df['cross_ma_exist'] = df['cross_ma'].rolling(window=3).sum() > 0
+    df['cross_ma_exist'] = df['cross_ma'].rolling(window=cross_ma_window).sum() > 0
     
     # 均线多头排列条件
     df['MA_trend'] = (df['MA5'] > df['MA10']) & (df['MA10'] > df['MA30'])
@@ -65,21 +77,49 @@ def check_hyg(stock, df, end_date=None):
     # 阳线后成交额总和
     after_cross_day_volume = after_cross_day['成交额'].sum()    
     # 阳线前成交额总和
-    before_cross_day = df.loc[cross_day.index[0]-after_cross_day_count:cross_day.index[0]]
+    before_cross_day = df.loc[cross_day.index[0]-after_cross_day_count:cross_day.index[0]-1]
     before_cross_day_volume = before_cross_day['成交额'].sum()
     if after_cross_day_volume  < before_cross_day_volume * 2:
         return False
 
-    # 涨幅未兑现,
-    #  涨幅小于阳线收盘价的6%, 并且收盘价在阳线均价之上
+    #  涨幅未兑现,
+    #  涨幅小于阳线收盘价的7%, 并且收盘价在阳线均价之上
     last_close = df.iloc[-1]['收盘']
     cross_day_close = cross_day_info['收盘']
     # 阳线当日均价计算
     cross_day_avg = (cross_day_info['最高'] + cross_day_info['最低'] + cross_day_info['收盘']) / 3
-    if (last_close - cross_day_close) / cross_day_close > 0.06 or last_close < cross_day_avg:
+    if (last_close - cross_day_close) / cross_day_close > trigger_threshold:
+        print(f"涨幅已兑现{stock}")
         return False
+
+    # 过滤跌破阳线均价
+    if last_close < cross_day_avg:
+        print(f"跌破阳线均价{stock}")
+        return False
+
+    # 过滤大阳线当天涨幅小于阈值
+    if cross_day_info['涨跌幅'] <  cross_day_threshold:
+        print(f"大阳线当天涨幅小于{cross_day_threshold}%{stock}")
+        return False
+
+    # 过滤阳线后出现大阴线 任意一天开收幅大于阈值
+    after_cross_day['开收幅'] = (after_cross_day['收盘'] - after_cross_day['开盘']) / after_cross_day['开盘']
+    if (after_cross_day['开收幅'] < big_drop_threshold).any():
+        print(f"阳线后出现大阴线{stock}")
+        return False
+    # 过滤大阳线后, 任意一天涨停
+    if (after_cross_day[1:]['涨跌幅'] > 10).any():
+        print(f"大阳线后涨停任意一天{stock}")
+        return False
+    
+    # 过滤50天前到7天前,最高收盘价超过当前价5%以上
+    max_price = df['收盘'][:-7].rolling(window=50).max()
+    if max_price.iloc[-1] > last_close * previous_highest_threshold:
+        print(f"50天前到7天前,最高收盘价超过当前价5%以上{stock}")
+        return False
+    
     df['strategy'] = '活跃股'
-    print(f"策略：活跃股，选中{df['股票代码'][0]}")
+    print(f"策略：活跃股，选中{stock}")
     return True
 
 
@@ -141,6 +181,9 @@ def check_ea(stock, df, end_date=None, ema_days=20):
     if rsi_rebound or rebound:
         return False
    
+    # 收盘价条件:  55EMA < x < 55EMA * 1.05
+    if last_close > last_ema * 1.05:
+        return False
     # 判断缩量
     df['strategy'] = '周期4'
     print(f"周期4选中{df['股票代码'][0]}")

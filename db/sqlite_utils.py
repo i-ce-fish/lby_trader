@@ -1,8 +1,12 @@
 import sqlite3
 import logging
 from datetime import datetime
-from dataclasses import fields as dataclass_fields  # 重命名导入
-from db.db_class import StockInfo, WatchingStock
+from dataclasses import fields as dataclass_fields
+from typing import Type
+
+from pydantic import BaseModel
+from db.db_class import StockInfo, WatchStock
+from pypika import Query, Table, Parameter
 
 
 
@@ -80,6 +84,29 @@ class SqliteDB:
         except Exception as e:
             logging.error(f"查询失败: {sql}, 错误: {e}")
             return []
+    def get_column_names(self, table_name: str) -> list[str]:
+            """获取表的列名"""
+            self.cursor.execute(f"PRAGMA table_info({table_name})")
+            return [row[1] for row in self.cursor.fetchall()]
+
+    def query_to_model(self, sql: str, model_class: Type[BaseModel], 
+                      params: tuple = None) -> list[BaseModel]:
+        """通用的查询转模型方法"""
+        try:
+            if params:
+                self.cursor.execute(sql, params)
+            else:
+                self.cursor.execute(sql)
+            
+            # 获取查询结果的列名
+            column_names = [description[0] for description in self.cursor.description]
+            results = self.cursor.fetchall()
+            
+            # 转换为模型对象
+            return [model_class.from_row(row, column_names) for row in results]
+        except Exception as e:
+            logging.error(f"查询转换失败: {sql}, 错误: {e}")
+            return []
 
 # 使用示例
 def init_db():
@@ -135,11 +162,27 @@ def init_db():
             update_time TIMESTAMP        -- 更新时间
         )
         """
+        # 股票每日数据
+        create_stock_daily_table = """
+        CREATE TABLE IF NOT EXISTS stock_daily_data (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            stock_code TEXT NOT NULL,         -- 股票代码
+            trade_date TEXT NOT NULL,         -- 交易日期
+            open     REAL,                       -- 开盘价
+            close REAL,                      -- 收盘价
+            high REAL,                       -- 最高价
+            low REAL,                        -- 最低价
+            volume INTEGER,                   -- 成交量
+            create_time TIMESTAMP,            -- 创建时间
+            update_time TIMESTAMP             -- 更新时间
+        );
+        """
         
         try:
             db.cursor.execute(create_stocks_table)
             db.cursor.execute(create_trades_table)
             db.cursor.execute(create_watch_table)
+            db.cursor.execute(create_stock_daily_table)
             db.conn.commit()
             logging.info("数据库初始化成功")
         except Exception as e:
@@ -363,6 +406,25 @@ def get_trade_history(code=None):
 
 
 
+def add_watch_stock_by_user(watch_stock: WatchStock):
+    with SqliteDB() as db:
+        # 获取对象的所有属性
+        attrs = watch_stock.__dict__
+        
+        # 动态构建 SQL 语句
+        columns = ', '.join(attrs.keys())
+        placeholders = ', '.join(['?' for _ in attrs])
+        sql = f"""
+        INSERT INTO stock_watch ({columns})
+        VALUES ({placeholders})
+        """
+        
+        try:
+            # 使用属性值列表作为参数
+            db.execute(sql, tuple(attrs.values()))
+        except Exception as e:
+            # 可以根据需要添加具体的错误处理逻辑
+            raise Exception(f"添加观察股票失败: {str(e)}")
 
 # 股票监听相关的操作函数
 def add_watch_stock(code, name, current_price, strategy):
@@ -437,7 +499,37 @@ def update_watch_status(code, strategy, status, current_price=None):
         except Exception as e:
             logging.error(f"更新股票监听状态失败: {e}")
             return False
-
+        
+def get_watch_stocks(watch_status: str = None, user: str = None) -> list[WatchStock]:
+    """获取监听表中所有股票列表"""
+    with SqliteDB() as db:
+        try:
+            stock_watch = Table('stock_watch')
+            query = Query.from_(stock_watch).select('*')
+            
+            params = []
+            if watch_status:
+                query = query.where(stock_watch.watch_status == Parameter('?'))
+                params.append(watch_status)
+            if user:
+                query = query.where(stock_watch.user == Parameter('?'))
+                params.append(user)
+            # 将生成的 SQL 中的 '%s' 替换为 sqlite 的 '?'
+            sql = str(query).replace("'?'", "?")
+            return db.query_to_model(sql, WatchStock, tuple(params))
+        except Exception as e:
+            logging.error(f"获取监听股票列表失败: {e}")
+            return []
+# 更新监听状态为
+def update_watch_stock_status(id, status):
+    with SqliteDB() as db:
+        sql = """
+        UPDATE stock_watch 
+        SET watch_status = ?, update_time = ? 
+        WHERE id = ?
+        """
+        db.execute(sql, (status, datetime.now(), id))
+  
 def get_watching_stocks(strategy=None):
     """
     获取监听中的股票列表
@@ -463,7 +555,7 @@ def get_watching_stocks(strategy=None):
             # 将查询结果转换为WatchingStock对象列表
             watching_stocks = []
             for row in results:
-                watching_stock = WatchingStock(
+                watching_stock = WatchStock(
                     id=row[0],
                     code=row[1],
                     name=row[2],
