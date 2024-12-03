@@ -12,14 +12,16 @@ from utils import DateHelper
 # @param data 股票日线数据
 # @param end_date 结束日期
 def check_hyg(stock, df, end_date=None):
+    # todo 环境系数 通过主板+创业板+涨跌家数+平均股价+涨跌停家属联合判断判断环境
+    env_factor = 1.0
     # 大阳线当天涨幅阈值(%)
-    cross_day_threshold = 8
+    cross_day_threshold = 8 * env_factor
     # 兑现涨幅阈值(.)
-    trigger_threshold = 0.1
+    trigger_threshold = 0.1 * env_factor
     # 大阴线跌幅阈值(.)
-    big_drop_threshold = -0.05
+    big_drop_threshold = -0.05 * env_factor
     # 以前的最高点涨幅阈值(%)
-    previous_highest_threshold = 1.1
+    previous_highest_threshold = 1.05 * env_factor
     # 均线穿越窗口期
     cross_ma_window = 4 
 

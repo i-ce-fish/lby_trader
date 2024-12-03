@@ -136,9 +136,9 @@ def init_db():
         create_trades_table = """
         CREATE TABLE IF NOT EXISTS trades (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            code TEXT,                    -- 股票代码
-            name TEXT,                    -- 股票名称
-            current_price REAL,           -- 最新价格
+            code TEXT,                   -- 股票代码
+            name TEXT,                   -- 股票名称
+            current_price REAL,          -- 最新价格
             buy_price REAL,              -- 买入价格
             sell_price REAL,             -- 卖出价格
             quantity INTEGER,            -- 持有数量
@@ -159,20 +159,26 @@ def init_db():
             strategy TEXT NOT NULL,       -- 策略名称
             watch_status TEXT NOT NULL,   -- 监听状态：监听中/已停止/已触发
             create_time TIMESTAMP,        -- 创建时间
-            update_time TIMESTAMP        -- 更新时间
+            update_time TIMESTAMP         -- 更新时间
         )
         """
         # 股票每日数据
         create_stock_daily_table = """
         CREATE TABLE IF NOT EXISTS stock_daily_data (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            stock_id INTEGER NOT NULL,        -- 关联股票ID
             stock_code TEXT NOT NULL,         -- 股票代码
             trade_date TEXT NOT NULL,         -- 交易日期
-            open     REAL,                       -- 开盘价
-            close REAL,                      -- 收盘价
-            high REAL,                       -- 最高价
-            low REAL,                        -- 最低价
+            open REAL,                        -- 开盘价
+            close REAL,                       -- 收盘价
+            high REAL,                        -- 最高价
+            low REAL,                         -- 最低价
             volume INTEGER,                   -- 成交量
+            change_pct REAL,                  -- 涨跌幅
+            change_amount REAL,               -- 涨跌额
+            turnover REAL,                    -- 成交额
+            amplitude REAL,                   -- 振幅
+            turnover_rate REAL,               -- 换手率
             create_time TIMESTAMP,            -- 创建时间
             update_time TIMESTAMP             -- 更新时间
         );

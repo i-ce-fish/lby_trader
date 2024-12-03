@@ -12,8 +12,7 @@ from db.sqlite_utils import get_stock_info_by_name
 from utils import DateHelper
 
 
-def fetch(stock_data):
-    stock_code = str(stock_data[1])
+def fetch(stock_code):
     # 起始日期取回测时间+120天前的数据
     start_date = DateHelper.get_days_before(120, DateHelper.get_end_date())
     format_start_date = DateHelper.date_to_str(DateHelper.str_to_date(start_date),"%Y%m%d")
@@ -34,7 +33,7 @@ def run(stocks):
     # 创建线程池，最多16个线程同时运行
     with concurrent.futures.ThreadPoolExecutor(max_workers=16) as executor:
         # 为每个股票创建一个future对象
-        future_to_stock = {executor.submit(fetch, stock): stock for stock in stocks}
+        future_to_stock = {executor.submit(fetch, stock[0]): stock for stock in stocks}
         # 当有future完成时获取结果
         for future in concurrent.futures.as_completed(future_to_stock):
             stock = future_to_stock[future]

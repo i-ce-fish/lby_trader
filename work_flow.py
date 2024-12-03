@@ -81,8 +81,8 @@ def update_listen_stocks():
     # 过滤掉None
     subset = subset.apply(fix_code, axis=1).dropna()
 
-    # 转换为元组列表
-    stocks = [tuple(x) for x in subset.values]
+    # 转换为元组列表 
+    stocks = [(str(tuple(x)[1]), tuple(x)[2]) for x in subset.values]
     # 获取股票数据  
     stocks_data = data_fetcher.run(stocks)
     end = settings.config['end_date']
@@ -94,14 +94,14 @@ def update_listen_stocks():
     results = {**zq4_results, **hyg_results}
     # 保存到数据库
     for stock,df in results.items():
-        code = stock[1]
-        name = stock[2]
+        code = stock[0]
+        name = stock[1]
         price = df.iloc[0]['收盘']
         strategy = df.iloc[0]['strategy']
         add_watch_stock(code, name, price, strategy)
     if len(results) > 0:
-        zq4_msg = '周期4: '+','.join(str(x[2]) for x in list(zq4_results.keys()))
-        hyg_msg = '活跃股: '+','.join(str(x[2]) for x in list(hyg_results.keys()))
+        zq4_msg = '周期4: '+','.join(str(x[1]) for x in list(zq4_results.keys()))
+        hyg_msg = '活跃股: '+','.join(str(x[1]) for x in list(hyg_results.keys()))
         time  = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         wx_pusher.wx_push('选股: '+hyg_msg+ '-----'+zq4_msg+ ' '+time)
 
