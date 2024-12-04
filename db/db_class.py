@@ -49,3 +49,25 @@ class WatchStock(BaseModel):
     # 可以添加表特定的方法
     def is_active(self) -> bool:
         return self.watch_status == "监听中"
+    
+
+@dataclass
+class StockDailyData(BaseModel):
+    """股票每日数据类"""
+    stock_id: int                      # 关联股票ID
+    stock_code: str                    # 股票代码
+    trade_date: str                    # 交易日期
+    id: Optional[int] = None           # 主键ID
+    open: Optional[float] = None       # 开盘价
+    close: Optional[float] = None      # 收盘价
+    high: Optional[float] = None       # 最高价
+    low: Optional[float] = None        # 最低价
+    volume: Optional[int] = None      # 成交量
+    change_pct: Optional[float] = None # 涨跌幅
+    change_amount: Optional[float] = None # 涨跌额
+    turnover: Optional[float] = None   # 成交额
+    amplitude: Optional[float] = None  # 振幅
+    turnover_rate: Optional[float] = None # 换手率
+    create_time: Optional[datetime] = None # 创建时间
+    update_time: Optional[datetime] = None # 更新时间
+

@@ -5,7 +5,7 @@ from dataclasses import fields as dataclass_fields
 from typing import Type
 
 from pydantic import BaseModel
-from db.db_class import StockInfo, WatchStock
+from db.db_class import StockDailyData, StockInfo, WatchStock
 from pypika import Query, Table, Parameter
 
 
@@ -605,7 +605,17 @@ def get_watch_history(code=None, strategy=None):
         except Exception as e:
             logging.error(f"获取监听历史失败: {e}")
             return []
-          
+# 股票每日数据相关的操作函数
+# def add_stock_daily_data(stock_daily_data: StockDailyData):
+   
+def get_stock_daily_data(stock_code: str, start_date: str, end_date: str = None) -> list[StockDailyData]:
+    with SqliteDB() as db:
+        sql = "SELECT * FROM stock_daily_data WHERE stock_code = ? AND trade_date >= ?"
+        if end_date:
+            sql += " AND trade_date <= ?"
+        return db.query_to_model(sql, StockDailyData, (stock_code, start_date, end_date))
+
+
 if __name__ == "__main__":
      with SqliteDB() as db:
         # 删除id大于26的记录

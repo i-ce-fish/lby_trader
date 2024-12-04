@@ -5,8 +5,8 @@
                 <!-- <Position /> -->
                 <el-button-group>
                     <el-button type='primary' @click="onChangeListType('监听中')">监听中股票</el-button>
-                    <el-button type='primary' @click="onChangeListType('结束监听')">结束监听</el-button>
                     <el-button type='primary' @click="onChangeListType('停止监听')">停止监听</el-button>
+                    <el-button type='primary' @click="onChangeListType('结束监听')">结束监听</el-button>
                     <el-button type='primary' @click="onChangeListType(null)">全部股票</el-button>
                 </el-button-group>
                 <List :type='listType' />

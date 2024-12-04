@@ -40,7 +40,7 @@ class Strategy(StrategyTemplate):
             self.quotation_engine.watch(stock_code)
 
     def on_bar(self, context: Context, data: Dict[str, DataFrame]):
-        self.log.info(f"on_bar: {self.watch_stocks}")
+        self.log.info("on_bar")
         self.update_watch_stocks()
         for stock_code in self.watch_stocks:
             # 过滤出最近一个工作日00:00:00到23:59:59之间的数据

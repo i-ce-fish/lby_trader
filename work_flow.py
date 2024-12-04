@@ -60,12 +60,13 @@ def update_listen_stocks():
     # 获取股票数据  
     stocks_data = data_fetcher.run(stocks)
     end = settings.config['end_date']
-    # 筛选周期4
-    head_dict = dict(islice(stocks_data.items(), 100))
-    zq4_results =  dict(filter(check_enter(end_date=end, strategy_fun=enter.check_ea), head_dict.items()))
+    
+    # 筛选周期4 too  需要配合同花顺资金流接口使用
+    # head_dict = dict(islice(stocks_data.items(), 100))
+    # zq4_results =  dict(filter(check_enter(end_date=end, strategy_fun=enter.check_ea), stocks_data.items()))
     # 筛选活跃股
     hyg_results = dict(filter(check_enter(end_date=end, strategy_fun=enter.check_hyg), stocks_data.items()))
-    results = {**zq4_results, **hyg_results}
+    results = hyg_results
     # 保存到数据库
     for stock,df in results.items():
         code = stock[0]

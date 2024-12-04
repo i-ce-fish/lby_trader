@@ -84,51 +84,52 @@ def check_hyg(stock, df, end_date=None):
     if after_cross_day_volume  < before_cross_day_volume * 2:
         return False
 
-    #  涨幅未兑现,
-    #  涨幅小于阳线收盘价的7%, 并且收盘价在阳线均价之上
+    #  过滤阳线后累计涨幅, 涨幅大于阈值
     last_close = df.iloc[-1]['收盘']
     cross_day_close = cross_day_info['收盘']
     # 阳线当日均价计算
     cross_day_avg = (cross_day_info['最高'] + cross_day_info['最低'] + cross_day_info['收盘']) / 3
-    if (last_close - cross_day_close) / cross_day_close > trigger_threshold:
-        print(f"涨幅已兑现{stock}")
-        logging.info(f"涨幅已兑现{stock}")
+    # 涨幅
+    increase_rate_after_cross_day = (last_close - cross_day_close) / cross_day_close
+    if increase_rate_after_cross_day > trigger_threshold:
+        print(f"阳线后累计涨幅{increase_rate_after_cross_day},{stock}")
+        logging.info(f"阳线后累计涨幅{increase_rate_after_cross_day},{stock}")
         return False
 
     # 过滤跌破阳线均价
     if last_close < cross_day_avg:
-        print(f"跌破阳线均价{stock}")
-        logging.info(f"跌破阳线均价{stock}")
+        print(f"跌破阳线均价{last_close},{stock}")
+        logging.info(f"跌破阳线均价{last_close},{stock}")
         return False
 
     # 过滤大阳线当天涨幅小于阈值
     if cross_day_info['涨跌幅'] <  cross_day_threshold:
-        print(f"大阳线当天涨幅小于{cross_day_threshold}%{stock}")
-        logging.info(f"大阳线当天涨幅小于{cross_day_threshold}%{stock}")
+        print(f"大阳线当天涨幅{cross_day_info['涨跌幅']}小于{cross_day_threshold}%{stock}")
+        logging.info(f"大阳线当天涨幅{cross_day_info['涨跌幅']}小于{cross_day_threshold}%{stock}")
         return False
 
     # 过滤阳线后出现大阴线 任意一天开收幅大于阈值
     after_cross_day['开收幅'] = (after_cross_day['收盘'] - after_cross_day['开盘']) / after_cross_day['开盘']
     if (after_cross_day['开收幅'] < big_drop_threshold).any():
-        print(f"阳线后出现大阴线{stock}")
-        logging.info(f"阳线后出现大阴线{stock}")
+        print(f"阳线后出现大阴线{','.join(f'{x*100:.2f}%' for x in after_cross_day['开收幅'])},{stock}")
+        logging.info(f"阳线后出现大阴线{','.join(f'{x*100:.2f}%' for x in after_cross_day['开收幅'])},{stock}")
         return False
     # 过滤大阳线后, 任意一天涨停
     if (after_cross_day[1:]['涨跌幅'] > 10).any():
-        print(f"大阳线后涨停任意一天{stock}")
-        logging.info(f"大阳线后涨停任意一天{stock}")
+        print(f"大阳线后涨停任意一天{','.join(f'{x:.2f}%' for x in after_cross_day['涨跌幅'])},{stock}")
+        logging.info(f"大阳线后涨停任意一天{','.join(f'{x:.2f}%' for x in after_cross_day['涨跌幅'])},{stock}")
         return False
     
     # 过滤50天前到7天前,最高收盘价超过当前价5%以上
     max_price = df['收盘'][:-7].rolling(window=50).max()
     if max_price.iloc[-1] > last_close * previous_highest_threshold:
-        print(f"50天前到7天前,最高收盘价超过当前价5%以上{stock}")
-        logging.info(f"50天前到7天前,最高收盘价超过当前价5%以上{stock}")
+        print(f"50天前到7天前,最高收盘价{max_price.iloc[-1]}超过当前价{last_close}的{previous_highest_threshold}%以上{stock}")
+        logging.info(f"50天前到7天前,最高收盘价{max_price.iloc[-1]}超过当前价{last_close}的{previous_highest_threshold}%以上{stock}")
         return False
     
     df['strategy'] = '活跃股'
-    print(f"策略：活跃股，选中{stock}")
-    logging.info(f"策略：活跃股，选中{stock}")
+    print(f"策略：活跃股，选中======>>>{stock}")
+    logging.info(f"策略：活跃股，选中======>>>{stock}")
     return True
 
 
@@ -172,11 +173,11 @@ def check_ea(stock, df, end_date=None, ema_days=20):
     # 获取最近20天数据
     recent_data = df.tail(20)  
     # 所有天的成交额都要大于3亿
-    volume_condition = ((recent_data['成交额']/ 100000000) >= 0.5).all()  
+    # volume_condition = ((recent_data['成交额']/ 100000000) >= 0.5).all()  
     # 所有天的换手率都要大于1%
-    turnover_condition = (recent_data['换手率'] >= 0.5).all()  
-    if not volume_condition or not turnover_condition:
-        return False
+    # turnover_condition = (recent_data['换手率'] >= 0.5).all()  
+    # if not volume_condition or not turnover_condition:
+    # return False
 
     # 计算20天内收盘价最高价格的那天
     # 找到最高价的那天
