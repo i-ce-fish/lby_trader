@@ -8,7 +8,6 @@ import logging
 
 import concurrent.futures
 
-from db.sqlite_utils import get_stock_info_by_name
 from utils import DateHelper
 
 
@@ -24,7 +23,7 @@ def fetch(stock_code):
             adjust="qfq"           # 前复权
         )
     if data.empty:
-        logging.info("股票日线数据缺失:{}".format(stock_code))
+        # logging.info("股票日线数据缺失:{}".format(stock_code))
         return None
     # 计算涨跌幅
     data['p_change'] = tl.ROC(data['收盘'], 1)
@@ -34,23 +33,23 @@ def fetch(stock_code):
 def run(stocks):
     stocks_data = {}
     # 创建线程池，最多16个线程同时运行
-    with concurrent.futures.ThreadPoolExecutor(max_workers=16) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=24) as executor:
         # 为每个股票创建一个future对象
         future_to_stock = {executor.submit(fetch, stock[0]): stock for stock in stocks}
-        # 当有future完成时获取结果
-        for future in concurrent.futures.as_completed(future_to_stock):
+        # 当有future完成时获取结果, 并打印索引
+        for idx,future in enumerate(concurrent.futures.as_completed(future_to_stock)):
+            print('数据获取进度:[{}/{}]'.format(idx + 1, len(future_to_stock)))
             stock = future_to_stock[future]
             try:
                 data = future.result()
                 if data is not None:
                     # 将成交量转换为double类型
                     data = data.astype({'成交量': 'double'})
-                    stocks_data[stock] = data
+                    stocks_data[stock[0]] = data
             except Exception as exc:
                 # 记录错误日志
                 print('%s(%r) generated an exception: %s' % (stock[1], stock[0], exc))
                 logging.error('%s(%r) generated an exception: %s' % (stock[1], stock[0], exc))
-
     return stocks_data
 
 

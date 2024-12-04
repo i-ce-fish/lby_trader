@@ -2,16 +2,17 @@
 
 from itertools import islice
 import data_fetcher
+from db.db_class import StockDailyData
 import settings
 import select_stock_strategy as enter
 import akshare as ak
 import wx_pusher
 import logging
 from datetime import datetime
-from db.sqlite_utils import StockInfo, add_watch_stock, get_stock_info_by_name, get_watching_stocks, init_db, save_stock_info, get_stock_info, get_all_stocks, update_stock_info
+from db.sqlite_utils import StockInfo, add_watch_stock, get_stock_info_by_name, get_watching_or_stopped_stocks, get_watching_stocks, init_db, save_stock_daily_data, save_stock_info, get_stock_info, get_all_stocks, update_stock_info
 from utils import DateHelper
 from decorators import handle_api_error
-
+import pandas as pd
 #  每周更新一次数据库
 def updateDb():
     update_stock()
@@ -66,19 +67,58 @@ def update_listen_stocks():
     # zq4_results =  dict(filter(check_enter(end_date=end, strategy_fun=enter.check_ea), stocks_data.items()))
     # 筛选活跃股
     hyg_results = dict(filter(check_enter(end_date=end, strategy_fun=enter.check_hyg), stocks_data.items()))
-    results = hyg_results
-    # 保存到数据库
-    for stock,df in results.items():
+    save_watch_stock(hyg_results)
+    if len(hyg_results) > 0:
+        hyg_msg = '活跃股: '+','.join(str(x[1]) for x in list(hyg_results.keys()))
+        wx_pusher.wx_push('选股: '+hyg_msg+ ' '+datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    
+    # 更新个股行情数据
+    update_stock_daily_data(stocks_data)
+
+def update_stock_daily_data(stocks_data):
+    logging.info('更新监听/停止监听个股行情数据')
+    watching_or_stopped_stocks = get_watching_or_stopped_stocks()
+    for stock in watching_or_stopped_stocks:
+        code = stock.code
+        if code in stocks_data and stocks_data[code] is not None:
+            df = stocks_data[code]
+            # 遍历df插入数据库
+            for _, row in df.iterrows():
+                date = pd.to_datetime(row['日期']).strftime('%Y%m%d')
+                open = row['开盘']
+                close = row['收盘']
+                high = row['最高']
+                low = row['最低']
+                volume = row['成交量']
+                amount = row['成交额']
+                turnover_rate = row['换手率']
+                change_pct = row['涨跌幅']
+                change_amount = row['涨跌额']
+                amplitude = row['振幅']
+                save_stock_daily_data(StockDailyData(code=code, 
+                                                     name=stock.name, 
+                                                     trade_date=date, 
+                                                     open=open, 
+                                                     close=close, 
+                                                     high=high, 
+                                                     low=low, 
+                                                     volume=volume, 
+                                                     amount=amount, 
+                                                     amplitude=amplitude,
+                                                     turnover_rate=turnover_rate, 
+                                                     change_pct=change_pct, 
+                                                     change_amount=change_amount,
+                                                     ))
+            
+
+def save_watch_stock(stockList):
+   # 保存到数据库
+    for stock,df in stockList.items():
         code = stock[0]
         name = stock[1]
         price = df.iloc[0]['收盘']
         strategy = df.iloc[0]['strategy']
         add_watch_stock(code, name, price, strategy)
-    if len(results) > 0:
-        zq4_msg = '周期4: '+','.join(str(x[1]) for x in list(zq4_results.keys()))
-        hyg_msg = '活跃股: '+','.join(str(x[1]) for x in list(hyg_results.keys()))
-        time  = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        wx_pusher.wx_push('选股: '+hyg_msg+ '-----'+zq4_msg+ ' '+time)
 
 #  todo  后期可能要加上科创板
 @handle_api_error(default_return=[])

@@ -43,6 +43,9 @@ class WatchStock(BaseModel):
     watch_status: str                  # 监听状态：监听中/已停止/已触发
     user_id: str = None                # 用户ID
     id: Optional[int] = None           # 主键ID
+    start_time: Optional[datetime] = None  # 开始时间
+    stop_time: Optional[datetime] = None  # 停止时间
+    end_time: Optional[datetime] = None  # 结束时间
     current_price: Optional[float] = None  # 最新价格
     create_time: Optional[datetime] = None  # 创建时间
     update_time: Optional[datetime] = None  # 更新时间
@@ -54,19 +57,19 @@ class WatchStock(BaseModel):
 @dataclass
 class StockDailyData(BaseModel):
     """股票每日数据类"""
-    stock_id: int                      # 关联股票ID
-    stock_code: str                    # 股票代码
+    code: str                    # 股票代码
+    name: str                    # 股票名称
     trade_date: str                    # 交易日期
     id: Optional[int] = None           # 主键ID
     open: Optional[float] = None       # 开盘价
     close: Optional[float] = None      # 收盘价
     high: Optional[float] = None       # 最高价
     low: Optional[float] = None        # 最低价
-    volume: Optional[int] = None      # 成交量
     change_pct: Optional[float] = None # 涨跌幅
     change_amount: Optional[float] = None # 涨跌额
-    turnover: Optional[float] = None   # 成交额
     amplitude: Optional[float] = None  # 振幅
+    volume: Optional[int] = None      # 成交量
+    amount: Optional[float] = None   # 成交额
     turnover_rate: Optional[float] = None # 换手率
     create_time: Optional[datetime] = None # 创建时间
     update_time: Optional[datetime] = None # 更新时间

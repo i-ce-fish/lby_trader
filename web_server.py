@@ -1,6 +1,7 @@
 import json
 from datetime import datetime, timedelta
 
+import pandas as pd
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, Query, status, Path
 from fastapi.middleware.cors import CORSMiddleware
@@ -113,7 +114,16 @@ async def read_user_routes(current_user: User = Depends(get_current_active_user)
 
 @app.get("/api/getWatchStocks")
 async def get_watch_stocks(watch_status: str = Query(default=None, description='监听状态')):
-    return db_service.get_watch_stocks(watch_status)
+    stocks = db_service.get_watch_stocks(watch_status)
+    for stock in stocks:
+        if stock.watch_status == '监听中' or stock.watch_status == '停止监听':
+            # 
+            list_daily_data = db_service.get_stock_daily_data(stock.code, 
+                                                                pd.to_datetime(stock.start_time).strftime('%Y%m%d'), 
+                                                                pd.to_datetime(stock.end_time).strftime('%Y%m%d'))
+            stock.daily_data = pd.DataFrame(list_daily_data)
+            
+    return stocks
 
 @app.post("/api/updateWatchStockStatus")
 async def update_watch_stock_status(id: int = Body(...), status: str = Body(...)):

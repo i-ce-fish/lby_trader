@@ -118,7 +118,8 @@ def init_db():
         # 创建股票基本信息表
         create_stocks_table = """
         CREATE TABLE IF NOT EXISTS stocks (
-            code TEXT PRIMARY KEY,          -- 股票代码
+            id INTEGER PRIMARY KEY AUTOINCREMENT,  -- 主键ID
+            code TEXT,                       -- 股票代码
             name TEXT,                      -- 股票名称
             price REAL,                     -- 当前价格
             change_pct REAL,                -- 涨跌幅
@@ -135,7 +136,7 @@ def init_db():
         # 创建交易记录表
         create_trades_table = """
         CREATE TABLE IF NOT EXISTS trades (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,  -- 主键ID
             code TEXT,                   -- 股票代码
             name TEXT,                   -- 股票名称
             current_price REAL,          -- 最新价格
@@ -152,38 +153,43 @@ def init_db():
         # 创建股票监听
         create_watch_table = """
         CREATE TABLE IF NOT EXISTS stock_watch (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            code TEXT NOT NULL,           -- 股票代码
-            name TEXT NOT NULL,           -- 股票名称
-            current_price REAL,           -- 最新价格
-            strategy TEXT NOT NULL,       -- 策略名称
-            watch_status TEXT NOT NULL,   -- 监听状态：监听中/已停止/已触发
-            create_time TIMESTAMP,        -- 创建时间
-            update_time TIMESTAMP         -- 更新时间
+            id INTEGER PRIMARY KEY AUTOINCREMENT,  -- 主键ID
+            code TEXT NOT NULL,                   -- 股票代码
+            name TEXT NOT NULL,                   -- 股票名称
+            current_price REAL,                   -- 最新价格
+            strategy TEXT NOT NULL,               -- 策略名称
+            watch_status TEXT NOT NULL,           -- 监听状态：监听中/已停止/已触发
+            start_time TIMESTAMP,                 -- 开始时间
+            stop_time TIMESTAMP,                  -- 停止时间
+            end_time TIMESTAMP,                   -- 结束时间
+            create_time TIMESTAMP,                -- 创建时间
+            update_time TIMESTAMP                  -- 更新时间
         )
         """
+        # db.execute("DROP TABLE IF EXISTS stock_daily_data")
+
         # 股票每日数据
         create_stock_daily_table = """
         CREATE TABLE IF NOT EXISTS stock_daily_data (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            stock_id INTEGER NOT NULL,        -- 关联股票ID
-            stock_code TEXT NOT NULL,         -- 股票代码
-            trade_date TEXT NOT NULL,         -- 交易日期
-            open REAL,                        -- 开盘价
-            close REAL,                       -- 收盘价
-            high REAL,                        -- 最高价
-            low REAL,                         -- 最低价
-            volume INTEGER,                   -- 成交量
-            change_pct REAL,                  -- 涨跌幅
-            change_amount REAL,               -- 涨跌额
-            turnover REAL,                    -- 成交额
-            amplitude REAL,                   -- 振幅
-            turnover_rate REAL,               -- 换手率
-            create_time TIMESTAMP,            -- 创建时间
-            update_time TIMESTAMP             -- 更新时间
+            id INTEGER PRIMARY KEY AUTOINCREMENT,  -- 主键ID
+            code TEXT NOT NULL,                   -- 股票代码
+            name TEXT NOT NULL,                   -- 股票名称
+            trade_date TEXT NOT NULL,              -- 交易日期
+            change_pct REAL,                      -- 涨跌幅
+            change_amount REAL,                   -- 涨跌额
+            amplitude REAL,                       -- 振幅
+            open REAL,                             -- 开盘价
+            close REAL,                            -- 收盘价
+            high REAL,                             -- 最高价
+            low REAL,                              -- 最低价    
+            volume INTEGER,                        -- 成交量
+            amount REAL,                           -- 成交额
+            turnover_rate REAL,                  -- 换手率
+            create_time TIMESTAMP ,  -- 创建时间
+            update_time TIMESTAMP    -- 更新时间
         );
         """
-        
+       
         try:
             db.cursor.execute(create_stocks_table)
             db.cursor.execute(create_trades_table)
@@ -410,10 +416,17 @@ def get_trade_history(code=None):
         return db.select('trades')
 
 
-def get_watching_or_stopped_stock(code: str):
+def get_watching_or_stopped_stock(code: str) -> list[WatchStock]:
+    """获取监听中/停止监听的股票"""
     with SqliteDB() as db:
         sql = "SELECT * FROM stock_watch WHERE code = ? AND (watch_status = '监听中' OR watch_status = '停止监听')"
-        return db.query_one(sql, (code,))
+        return db.query_to_model(sql, WatchStock, (code,))
+
+def get_watching_or_stopped_stocks() -> list[WatchStock]:
+    """获取监听中/停止监听的股票"""
+    with SqliteDB() as db:
+        sql = "SELECT * FROM stock_watch WHERE watch_status = '监听中' OR watch_status = '停止监听'"
+        return db.query_to_model(sql, WatchStock)
 
 def add_watch_stock_by_user(watch_stock: WatchStock):
     with SqliteDB() as db:
@@ -531,15 +544,43 @@ def get_watch_stocks(watch_status: str = None, user: str = None) -> list[WatchSt
             logging.error(f"获取监听股票列表失败: {e}")
             return []
 # 更新监听状态为
-def update_watch_stock_status(id, status):
+# def update_watch_stock_status(id, status):
+#     with SqliteDB() as db:
+#         sql = """
+#         UPDATE stock_watch 
+#         SET watch_status = ?, update_time = ? 
+#         WHERE id = ?
+#         """
+#         db.execute(sql, (status, datetime.now(), id))
+def start_watch_stock(id):
+    """开始监听股票"""
     with SqliteDB() as db:
         sql = """
         UPDATE stock_watch 
-        SET watch_status = ?, update_time = ? 
+        SET watch_status = ?, start_time = ?, update_time = ?
         WHERE id = ?
         """
-        db.execute(sql, (status, datetime.now(), id))
-  
+        db.execute(sql, ('监听中', datetime.now(), datetime.now(), id))
+
+def stop_watch_stock(id):
+    """停止监听股票"""
+    with SqliteDB() as db:
+        sql = """
+        UPDATE stock_watch 
+        SET watch_status = ?, stop_time = ?, update_time = ?
+        WHERE id = ?
+        """
+        db.execute(sql, ('停止监听', datetime.now(), datetime.now(), id))   
+def end_watch_stock(id):
+    """结束监听股票"""
+    with SqliteDB() as db:
+        sql = """
+        UPDATE stock_watch 
+        SET watch_status = ?, end_time = ?, update_time = ?
+        WHERE id = ?
+        """
+        db.execute(sql, ('结束监听', datetime.now(), datetime.now(), id))    
+
 def get_watching_stocks(strategy=None):
     """
     获取监听中的股票列表
@@ -605,15 +646,70 @@ def get_watch_history(code=None, strategy=None):
         except Exception as e:
             logging.error(f"获取监听历史失败: {e}")
             return []
+        
 # 股票每日数据相关的操作函数
-# def add_stock_daily_data(stock_daily_data: StockDailyData):
-   
-def get_stock_daily_data(stock_code: str, start_date: str, end_date: str = None) -> list[StockDailyData]:
+def save_stock_daily_data(daily_data: StockDailyData) -> bool:
+    """
+    保存股票每日行情数据
+    
+    参数:
+        daily_data: StockDailyData对象，包含股票每日行情数据
+    返回:
+        bool: 是否保存成功
+    """
     with SqliteDB() as db:
-        sql = "SELECT * FROM stock_daily_data WHERE stock_code = ? AND trade_date >= ?"
+        check_sql = """
+        SELECT id FROM stock_daily_data 
+        WHERE code = ? AND trade_date = ?
+        """
+        existing = db.query_one(check_sql, (daily_data.code, daily_data.trade_date))
+        # 设置时间戳
+        now = datetime.now()
+        # 获取对象的所有字段
+        fields = [field.name for field in dataclass_fields(StockDailyData)]
+        # 排除 id 字段(如果存在)
+        if 'id' in fields:
+            fields.remove('id')
+            
+        values = [getattr(daily_data, field) for field in fields]
+
+        if existing:
+            id = existing[0]
+            values[-1] = now
+            fields.remove('create_time')
+
+            # 构建 SQL 语句
+            update_str = ' = ?, '.join(fields) + ' = ?'
+            sql = f"""  
+            UPDATE stock_daily_data 
+            SET {update_str}
+            WHERE id = ?
+            """
+        else:
+            # 构建 SQL 语句
+            values[-1] = now
+            values[-2] = now
+
+            fields_str = ' , '.join(fields) 
+            placeholders = ', '.join(['?' for _ in fields])
+            sql = f"""
+            INSERT INTO stock_daily_data ({fields_str})
+            VALUES ({placeholders})
+            """
+
+        try:
+            db.execute(sql, values)
+            return True
+        except Exception as e:
+            logging.error(f"保存股票每日数据失败: {e}")
+            return False        
+   
+def get_stock_daily_data(code: str, start_date: str, end_date: str = None) -> list[StockDailyData]:
+    with SqliteDB() as db:
+        sql = "SELECT * FROM stock_daily_data WHERE code = ? AND trade_date >= ?"
         if end_date:
             sql += " AND trade_date <= ?"
-        return db.query_to_model(sql, StockDailyData, (stock_code, start_date, end_date))
+        return db.query_to_model(sql, StockDailyData, (code, start_date, end_date))
 
 
 if __name__ == "__main__":
