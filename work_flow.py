@@ -69,7 +69,10 @@ def update_listen_stocks():
     hyg_results = dict(filter(check_enter(end_date=end, strategy_fun=enter.check_hyg), stocks_data.items()))
     save_watch_stock(hyg_results)
     if len(hyg_results) > 0:
-        hyg_msg = '活跃股: '+','.join(str(x[1]) for x in list(hyg_results.keys()))
+        hyg_msg = '活跃股: '
+        for code in hyg_results.keys():
+            stock = get_stock_info(code)
+            hyg_msg += stock.name + ', '
         wx_pusher.wx_push('选股: '+hyg_msg+ ' '+datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     
     # 更新个股行情数据
