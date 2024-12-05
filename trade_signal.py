@@ -24,9 +24,10 @@ class SignalParams:
 # 信号参数常量定义
 BUY_POINT_PARAMS = SignalParams(threshold=90, percent=0.05, column='dz')     # 峰值回撤参数
 SELL_POINT_PARAMS = SignalParams(threshold=0, percent=0.05, column='dz')    # 波谷反弹参数
-#  todo  小幅拉升时回撤不够准确
-QUICK_PULLUP_PARAMS = SignalParams(threshold=3, percent=0.03, column='sp')    # 拉升信号参数
-
+#  todo  小幅拉升时回撤不够准确, 大幅拉升时候回撤响应慢
+QUICK_PULLUP_PARAMS = SignalParams(threshold=3, percent=0.015, column='sp')    # 拉升信号参数
+# 开始拉升
+START_PULLUP_PARAMS = SignalParams(threshold=3, percent=0, column='sp')    # 开始拉升参数
 
 class SignalMonitorBase:
     
@@ -137,6 +138,8 @@ class SignalMonitorManager:
         self.sell_point_monitors: dict[str, ValleyBounceMonitor] = {}
         #  快速拉升监控
         self.quick_pullup_monitors: dict[str, PeakDrawdownMonitor] = {}  # 使用相同的监控逻辑
+        # 开始拉升监控
+        self.start_pullup_monitors: dict[str, ValleyBounceMonitor] = {}
         
     def check_signals(self, df: pd.DataFrame, stock_code: str) -> List[Tuple[str, TradeSignal]]:
         # 初始化监控器
@@ -144,7 +147,7 @@ class SignalMonitorManager:
             self.buy_point_monitors[stock_code] = PeakDrawdownMonitor(BUY_POINT_PARAMS, self.log)
             self.sell_point_monitors[stock_code] = ValleyBounceMonitor(SELL_POINT_PARAMS, self.log)
             self.quick_pullup_monitors[stock_code] = PeakDrawdownMonitor(QUICK_PULLUP_PARAMS, self.log)
-            
+            self.start_pullup_monitors[stock_code] = PeakDrawdownMonitor(START_PULLUP_PARAMS, self.log)
         signals = []
         
         # 检查峰值回撤信号
@@ -158,5 +161,9 @@ class SignalMonitorManager:
         # 检查拉升信号
         if quick_pullup_signal := self.quick_pullup_monitors[stock_code].on_tick(df, stock_code):
             signals.append(('拉升', quick_pullup_signal))
+            
+        # 检查开始拉升信号
+        if start_pullup_signal := self.start_pullup_monitors[stock_code].on_tick(df, stock_code):
+            signals.append(('开始拉升', start_pullup_signal))
             
         return signals

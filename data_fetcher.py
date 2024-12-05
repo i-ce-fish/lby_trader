@@ -23,7 +23,7 @@ def fetch(stock_code):
             adjust="qfq"           # 前复权
         )
     if data.empty:
-        logging.info("股票日线数据缺失:{}".format(stock_code))
+        # logging.info("股票日线数据缺失:{}".format(stock_code))
         return None
     # 计算涨跌幅
     data['p_change'] = tl.ROC(data['收盘'], 1)
