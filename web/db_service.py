@@ -1,7 +1,7 @@
 from typing import List
 
 from db import sqlite_utils
-from db.db_class import WatchStock
+from db.db_class import StockDailyData, WatchStock
 from web.database import Database
 from web.models import WatchStocks, User, Strategies
 from web.settings import APISettings
@@ -13,6 +13,9 @@ class DbService:
         self.config = config
         self.database = database
 
+    def get_stock_daily_data(self, code: str, start_date: str, end_date: str = None) -> List[StockDailyData]:
+        return sqlite_utils.get_stock_daily_data(code, start_date, end_date)
+
     def get_watching_or_stopped_stock(self, code: str) -> WatchStocks:
         return sqlite_utils.get_watching_or_stopped_stock(code)
 
@@ -20,7 +23,13 @@ class DbService:
         return sqlite_utils.get_watch_stocks(watching, user)
 
     def update_watch_stock_status(self, id: int, status: str) -> WatchStocks:
-        return sqlite_utils.update_watch_stock_status(id, status)
+        if status == '监听中':
+            res = sqlite_utils.start_watch_stock(id)
+        elif status == '停止监听':
+            res = sqlite_utils.stop_watch_stock(id)
+        elif status == '结束监听':
+            res = sqlite_utils.end_watch_stock(id)
+        return res
 
     def add_watch_stock(self, watch_stock: WatchStock) -> WatchStocks:
         return sqlite_utils.add_watch_stock_by_user(watch_stock)   

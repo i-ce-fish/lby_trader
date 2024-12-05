@@ -23,7 +23,7 @@ def check_hyg(stock, df, end_date=None):
     # 以前的最高点涨幅阈值(%)
     previous_highest_threshold = 1.05 * env_factor
     # 均线穿越窗口期
-    cross_ma_window = 4 
+    cross_ma_window = 5 
 
     # 过滤次新股
     if check_new(stock, df, end_date):
@@ -92,8 +92,8 @@ def check_hyg(stock, df, end_date=None):
     # 涨幅
     increase_rate_after_cross_day = (last_close - cross_day_close) / cross_day_close
     if increase_rate_after_cross_day > trigger_threshold:
-        print(f"阳线后累计涨幅{increase_rate_after_cross_day},{stock}")
-        logging.info(f"阳线后累计涨幅{increase_rate_after_cross_day},{stock}")
+        print(f"阳线后累计涨幅{increase_rate_after_cross_day*100:.2f}%,{stock}")
+        logging.info(f"阳线后累计涨幅{increase_rate_after_cross_day*100:.2f}%,{stock}")
         return False
 
     # 过滤跌破阳线均价

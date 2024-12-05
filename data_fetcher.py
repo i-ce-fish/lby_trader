@@ -23,7 +23,7 @@ def fetch(stock_code):
             adjust="qfq"           # 前复权
         )
     if data.empty:
-        # logging.info("股票日线数据缺失:{}".format(stock_code))
+        logging.info("股票日线数据缺失:{}".format(stock_code))
         return None
     # 计算涨跌幅
     data['p_change'] = tl.ROC(data['收盘'], 1)
@@ -45,7 +45,7 @@ def run(stocks):
                 if data is not None:
                     # 将成交量转换为double类型
                     data = data.astype({'成交量': 'double'})
-                    stocks_data[stock[0]] = data
+                    stocks_data[stock] = data
             except Exception as exc:
                 # 记录错误日志
                 print('%s(%r) generated an exception: %s' % (stock[1], stock[0], exc))
