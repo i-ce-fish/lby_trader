@@ -663,6 +663,11 @@ def save_stock_daily_data(daily_data: StockDailyData) -> bool:
         WHERE code = ? AND trade_date = ?
         """
         existing = db.query_one(check_sql, (daily_data.code, daily_data.trade_date))
+        # 如果是今天之前的交易数据,  不做处理
+        is_old_data = daily_data.trade_date < datetime.now().strftime('%Y%m%d')
+        if is_old_data and existing:
+            return True
+        
         # 设置时间戳
         now = datetime.now()
         # 获取对象的所有字段
@@ -675,7 +680,8 @@ def save_stock_daily_data(daily_data: StockDailyData) -> bool:
 
         if existing:
             id = existing[0]
-            values[-1] = now
+            values[-2] = now  # 更新时间
+            values[-1] = id  # id
             fields.remove('create_time')
 
             # 构建 SQL 语句
