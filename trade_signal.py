@@ -20,14 +20,18 @@ class SignalParams:
     percent: float # 百分比
     column: str # 数据列名
 
+@dataclass
+class ThresholdParams(SignalParams):
+    drawdown_percent: float = 0.05  # 回撤阈值，默认5%
 
 # 信号参数常量定义
 BUY_POINT_PARAMS = SignalParams(threshold=90, percent=0.05, column='dz')     # 峰值回撤参数
 SELL_POINT_PARAMS = SignalParams(threshold=0, percent=0.05, column='dz')    # 波谷反弹参数
 #  todo  小幅拉升时回撤不够准确, 大幅拉升时候回撤响应慢
 QUICK_PULLUP_PARAMS = SignalParams(threshold=3, percent=0.015, column='sp')    # 拉升信号参数
-# 开始拉升
-START_PULLUP_PARAMS = SignalParams(threshold=3, percent=0, column='sp')    # 开始拉升参数
+# 开始拉升, 指标值超过3时触发
+START_PULLUP_PARAMS = ThresholdParams(threshold=3, percent=0, column='sp', 
+                                      drawdown_percent=0.01)    # 开始拉升参数
 
 class SignalMonitorBase:
     
@@ -128,6 +132,56 @@ class ValleyBounceMonitor(SignalMonitorBase):
         super()._reset_state()
         self.min_value = float('inf')
 
+# 新增阈值监控类
+class ThresholdMonitor(SignalMonitorBase):
+    def __init__(self, params: ThresholdParams, log: logging.Logger):
+        super().__init__(params, log)
+        self.max_value = None  # 记录触发后的最大值
+        self.drawdown_percent = params.drawdown_percent  # 回撤阈值，可以通过参数配置
+        
+    def on_tick(self, df: pd.DataFrame, stock_code: str) -> Optional[TradeSignal]:
+        try:
+            value = df[self.column].iloc[-1]
+            current_time = df.index[-1]
+
+            # 如果当前时间与最新监听时间相同
+            if self.latest_time and (current_time == self.latest_time):
+                return None
+                
+            self.latest_time = current_time
+            
+            # 当值超过阈值且未通知时触发信号
+            if value >= self.threshold and not self.notified:
+                self.notified = True
+                self.max_value = value
+                return TradeSignal(
+                    stock_code=stock_code,
+                    current_value=value,
+                    extreme_value=self.threshold,
+                    change_ratio=0,  # 阈值监控不需要计算变化比例
+                    time=current_time
+                )
+            
+            # 更新最大值
+            if self.notified and value > self.max_value:
+                self.max_value = value
+            
+            # 检查回撤重置条件
+            if self.notified and self.max_value:
+                drawdown = (self.max_value - value) / self.max_value
+                if drawdown >= self.drawdown_percent:
+                    self._reset_state()
+                    self.max_value = None
+            
+            # 当值低于阈值时重置状态
+            if value < self.threshold:
+                self._reset_state()
+                self.max_value = None
+                
+            return None
+        except Exception as e:
+            self.log.error(f"阈值监控异常: {e}", exc_info=True)
+            return None
 
 class SignalMonitorManager:
     def __init__(self, log: logging.Logger):
@@ -136,10 +190,10 @@ class SignalMonitorManager:
         self.buy_point_monitors: dict[str, PeakDrawdownMonitor] = {}
         #  卖点监控
         self.sell_point_monitors: dict[str, ValleyBounceMonitor] = {}
-        #  快速拉升监控
+        #  快速拉升后回落监控
         self.quick_pullup_monitors: dict[str, PeakDrawdownMonitor] = {}  # 使用相同的监控逻辑
-        # 开始拉升监控
-        self.start_pullup_monitors: dict[str, ValleyBounceMonitor] = {}
+        #  开始拉升监控
+        self.start_pullup_monitors: dict[str, ThresholdMonitor] = {}
         
     def check_signals(self, df: pd.DataFrame, stock_code: str) -> List[Tuple[str, TradeSignal]]:
         # 初始化监控器
@@ -147,7 +201,8 @@ class SignalMonitorManager:
             self.buy_point_monitors[stock_code] = PeakDrawdownMonitor(BUY_POINT_PARAMS, self.log)
             self.sell_point_monitors[stock_code] = ValleyBounceMonitor(SELL_POINT_PARAMS, self.log)
             self.quick_pullup_monitors[stock_code] = PeakDrawdownMonitor(QUICK_PULLUP_PARAMS, self.log)
-            self.start_pullup_monitors[stock_code] = PeakDrawdownMonitor(START_PULLUP_PARAMS, self.log)
+            self.start_pullup_monitors[stock_code] = ThresholdMonitor(START_PULLUP_PARAMS, self.log)
+
         signals = []
         
         # 检查峰值回撤信号
@@ -162,8 +217,10 @@ class SignalMonitorManager:
         if quick_pullup_signal := self.quick_pullup_monitors[stock_code].on_tick(df, stock_code):
             signals.append(('拉升', quick_pullup_signal))
             
-        # 检查开始拉升信号
+        # 检查拉升信号
         if start_pullup_signal := self.start_pullup_monitors[stock_code].on_tick(df, stock_code):
             signals.append(('开始拉升', start_pullup_signal))
-            
+        
+
+
         return signals
