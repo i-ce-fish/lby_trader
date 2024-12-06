@@ -59,7 +59,7 @@ def update_listen_stocks():
     # 转换为元组列表 
     stocks = [(tuple(x)[1], tuple(x)[2]) for x in subset.values]
     # 测试数据
-    # stocks = [( '300580', '贝斯特'),   ( '300100', '双林股份'),]
+    # stocks = [( '000882', '华联股份'),( '300100', '双林股份'),]
     # 获取股票数据  
     stocks_data = data_fetcher.run(stocks)
     end = settings.config['end_date']
@@ -71,10 +71,10 @@ def update_listen_stocks():
     hyg_results = dict(filter(check_enter(end_date=end, strategy_fun=enter.check_hyg), stocks_data.items()))
     save_watch_stock(hyg_results)
     if len(hyg_results) > 0:
-        hyg_msg = '活跃股: '
+        hyg_msg = ''
         for stock in hyg_results.keys():
-            hyg_msg += stock[1]+ '('+stock[0]+')' + ', '
-        wx_pusher.wx_push('选股: '+hyg_msg+ ' '+datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            hyg_msg += f"{stock[1].ljust(10)}\t{stock[0]}\n"
+        wx_pusher.wx_push(f'[选股] \n{hyg_msg}\n{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
     
     # 更新个股行情数据
     update_stock_daily_data(stocks_data)
@@ -99,7 +99,7 @@ def update_stock_daily_data(stocks_data):
                 change_pct = row['涨跌幅']
                 change_amount = row['涨跌额']
                 amplitude = row['振幅']
-                save_stock_daily_data(StockDailyData(code=stock.code), 
+                save_stock_daily_data(StockDailyData(code=stock.code, 
                                                      name=stock.name, 
                                                      trade_date=date, 
                                                      open=open, 
@@ -112,7 +112,7 @@ def update_stock_daily_data(stocks_data):
                                                      turnover_rate=turnover_rate, 
                                                      change_pct=change_pct, 
                                                      change_amount=change_amount,
-                                                     )
+                                                     ))
             
 
 def save_watch_stock(stockList):
@@ -130,7 +130,7 @@ def get_all_stocks():
     """获取所有主板+创业板股票数据"""
     all_data = ak.stock_zh_a_spot_em()
     if all_data is None:
-        logging.error("获取所有股票数据失败")
+        logging.error("获取所���股票数据失败")
         return []
     logging.info(f"获取所有股票数据成功, 数量: {len(all_data)}")
     # 使用正则表达式过滤掉北交所(8/9开头)、科创板(688开头)和其他特殊板块(4开头)的股票

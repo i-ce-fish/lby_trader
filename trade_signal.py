@@ -22,7 +22,7 @@ class SignalParams:
 
 @dataclass
 class ThresholdParams(SignalParams):
-    drawdown_percent: float = 0.05  # 回撤阈值，默认5%
+    drawdown_percent: float = 0.01  # 回撤阈值，默认1%, 回撤超过阈值后重置通知状态
 
 # 信号参数常量定义
 BUY_POINT_PARAMS = SignalParams(threshold=90, percent=0.05, column='dz')     # 峰值回撤参数
@@ -30,7 +30,7 @@ SELL_POINT_PARAMS = SignalParams(threshold=0, percent=0.05, column='dz')    # �
 #  todo  小幅拉升时回撤不够准确, 大幅拉升时候回撤响应慢
 QUICK_PULLUP_PARAMS = SignalParams(threshold=3, percent=0.015, column='sp')    # 拉升信号参数
 # 开始拉升, 指标值超过3时触发
-START_PULLUP_PARAMS = ThresholdParams(threshold=3, percent=0, column='sp', 
+START_PULLUP_PARAMS = ThresholdParams(threshold=1, percent=0, column='sp', 
                                       drawdown_percent=0.01)    # 开始拉升参数
 
 class SignalMonitorBase:
@@ -215,7 +215,7 @@ class SignalMonitorManager:
             
         # 检查拉升信号
         if quick_pullup_signal := self.quick_pullup_monitors[stock_code].on_tick(df, stock_code):
-            signals.append(('拉升', quick_pullup_signal))
+            signals.append(('结束拉升', quick_pullup_signal))
             
         # 检查拉升信号
         if start_pullup_signal := self.start_pullup_monitors[stock_code].on_tick(df, stock_code):

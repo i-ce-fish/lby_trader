@@ -38,7 +38,7 @@ def run(stocks):
         future_to_stock = {executor.submit(fetch, stock[0]): stock for stock in stocks}
         # 当有future完成时获取结果, 并打印索引
         for idx,future in enumerate(concurrent.futures.as_completed(future_to_stock)):
-            print('数据获取进度:[{}/{}]'.format(idx + 1, len(future_to_stock)))
+            print(f'\r数据获取进度:[{idx + 1}/{len(future_to_stock)}]', end='', flush=True)
             stock = future_to_stock[future]
             try:
                 data = future.result()

@@ -43,12 +43,11 @@ class Strategy(StrategyTemplate):
         self.log.info("on_bar")
         self.update_watch_stocks()
         for stock_code in self.watch_stocks:
+            ddt_df = ddt(data[stock_code])
             # 过滤出最近一个工作日00:00:00到23:59:59之间的数据
             latest_day = data[stock_code].index[-1]
             start_time = latest_day.replace(hour=0, minute=0, second=0, microsecond=0)
             end_time = latest_day.replace(hour=23, minute=59, second=59, microsecond=999999)
-            # todo 是否需要过滤前一天的数据 
-            ddt_df = ddt(data[stock_code])
             # 过滤索引为今天的数据
             latest_data = ddt_df.loc[start_time.strftime('%Y-%m-%d %H:%M:%S'):end_time.strftime('%Y-%m-%d %H:%M:%S')]
             # 根据ddt_line绘制曲线，
@@ -62,7 +61,7 @@ class Strategy(StrategyTemplate):
             if len(signals)>0 :
                 latest_info = latest_data.iloc[-1]
                 signal_types = [signal[0] for signal in signals]  # 提取所有信号类型
-                push_msg = f"{stock_id}: {', '.join(signal_types)}, 由价格{latest_info.close}在{latest_data.index[-1]}触发."
+                push_msg = f"[{' '.join(signal_types)}] {stock_id}: 由价格{latest_info.close}在{latest_data.index[-1].strftime('%H:%M:%S')}触发"
                 push_res = wx_push(push_msg)
                 self.log.info(f"推送消息: {push_msg}==>>>{push_res}")
 
