@@ -1,5 +1,6 @@
 import json
 from datetime import datetime, timedelta
+from typing import List
 
 import pandas as pd
 import uvicorn
@@ -13,6 +14,7 @@ from starlette.responses import RedirectResponse
 
 from db.db_class import WatchStock
 from db.sqlite_utils import get_stock_info
+from utils import beautify_time
 from web.database import Database
 from web.db_service import DbService
 from web.dto import LoginRequest
@@ -48,6 +50,16 @@ app.add_middleware(
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+# 返回定义fastapi返回的属性(数组)
+def toList(data:List[dict]):
+    result = []
+    for item in data:
+        result.append(item.__dict__)
+    return result
+
+# 返回定义fastapi返回的属性(对象)
+def toDict(data:dict):
+    return data.__dict__
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
@@ -115,15 +127,34 @@ async def read_user_routes(current_user: User = Depends(get_current_active_user)
 @app.get("/api/getWatchStocks")
 async def get_watch_stocks(watch_status: str = Query(default=None, description='监听状态')):
     stocks = db_service.get_watch_stocks(watch_status)
+    now = datetime.now()
     for stock in stocks:
-        if stock.watch_status == '监听中' or stock.watch_status == '停止监听':
-            # 
-            list_daily_data = db_service.get_stock_daily_data(stock.code, 
-                                                                pd.to_datetime(stock.start_time).strftime('%Y%m%d'), 
-                                                                pd.to_datetime(stock.end_time).strftime('%Y%m%d'))
+        end_time  = stock.end_time if stock.end_time else now
+        end_time = pd.to_datetime(end_time).strftime('%Y%m%d')
+        start_time = stock.start_time if stock.start_time else stock.create_time
+        start_time = pd.to_datetime(start_time).strftime('%Y%m%d')
+        list_daily_data = db_service.get_stock_daily_data(stock.code,start_time, end_time)
+        if len(list_daily_data) > 0:
             stock.daily_data = pd.DataFrame(list_daily_data)
-            
-    return stocks
+            #  百分比格式
+
+            # 收盘涨幅 
+            stock.daily_data['daily_change'] = (stock.daily_data['close'].pct_change().fillna(0) * 100 ).round(2)
+            # 计算当日最高价相对前一日收盘价的涨幅
+            stock.daily_data['max_daily_change'] = ((stock.daily_data['high'] - stock.daily_data['close'].shift(1)) / stock.daily_data['close'].shift(1) * 100).fillna(0).round(2)
+            # 计算当日最低价相对前一日收盘价的涨幅
+            stock.daily_data['min_daily_change'] = ((stock.daily_data['low'] - stock.daily_data['close'].shift(1)) / stock.daily_data['close'].shift(1) * 100).fillna(0).round(2)
+
+            # 区间累计涨幅
+            stock.total_return = (stock.daily_data['daily_change'].sum()).round(2)
+            # 区间累计最大涨幅
+            stock.max_total_return = (stock.daily_data['max_daily_change'].sum()).round(2)
+            stock.daily_data = stock.daily_data[['trade_date','daily_change','max_daily_change','min_daily_change']].to_dict('records')
+        stock.end_time = beautify_time(stock.end_time)
+        stock.start_time = beautify_time(stock.start_time)
+        stock.create_time = beautify_time(stock.create_time)
+        stock.update_time = beautify_time(stock.update_time)
+    return toList(stocks)
 
 @app.post("/api/updateWatchStockStatus")
 async def update_watch_stock_status(id: int = Body(...), status: str = Body(...)):

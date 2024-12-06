@@ -6,7 +6,7 @@ from typing import Type
 
 from pydantic import BaseModel
 from db.db_class import StockDailyData, StockInfo, WatchStock
-from pypika import Query, Table, Parameter
+from pypika import Query, Table, Parameter, Order
 
 
 
@@ -394,7 +394,7 @@ def update_trade_price(trade_id, current_price):
         return db.update('trades', update_data, {'id': trade_id})
 
 def close_trade(trade_id, sell_price):
-    """结束交易（卖出）"""
+    """结束交易（卖��）"""
     with SqliteDB() as db:
         update_data = {
             'sell_price': sell_price,
@@ -420,7 +420,7 @@ def get_watching_or_stopped_stock(code: str) -> list[WatchStock]:
     """获取监听中/停止监听的股票"""
     with SqliteDB() as db:
         sql = "SELECT * FROM stock_watch WHERE code = ? AND (watch_status = '监听中' OR watch_status = '停止监听')"
-        return db.query_to_model(sql, WatchStock, (code,))
+        return db.query_to_model(sql, WatchStock, (code))
 
 def get_watching_or_stopped_stocks() -> list[WatchStock]:
     """获取监听中/停止监听的股票"""
@@ -537,6 +537,10 @@ def get_watch_stocks(watch_status: str = None, user: str = None) -> list[WatchSt
             if user:
                 query = query.where(stock_watch.user == Parameter('?'))
                 params.append(user)
+                
+            # 添加按create_time倒序排序
+            query = query.orderby(stock_watch.create_time, order=Order.desc)
+            
             # 将生成的 SQL 中的 '%s' 替换为 sqlite 的 '?'
             sql = str(query).replace("'?'", "?")
             return db.query_to_model(sql, WatchStock, tuple(params))
@@ -710,11 +714,9 @@ def save_stock_daily_data(daily_data: StockDailyData) -> bool:
             logging.error(f"保存股票每日数据失败: {e}")
             return False        
    
-def get_stock_daily_data(code: str, start_date: str, end_date: str = None) -> list[StockDailyData]:
+def get_stock_daily_data(code: str, start_date: str, end_date: str) -> list[StockDailyData]:
     with SqliteDB() as db:
-        sql = "SELECT * FROM stock_daily_data WHERE code = ? AND trade_date >= ?"
-        if end_date:
-            sql += " AND trade_date <= ?"
+        sql = "SELECT * FROM stock_daily_data WHERE code = ? AND trade_date >= ? AND trade_date <= ?"
         return db.query_to_model(sql, StockDailyData, (code, start_date, end_date))
 
 

@@ -2,6 +2,8 @@
 from datetime import datetime, timedelta
 from typing import Union, Optional
 
+import pandas as pd
+
 # import sys
 # from pathlib import Path
 # # 添加项目根目录到Python路径
@@ -148,3 +150,9 @@ if __name__ == "__main__":
     # 获取回测日期
     # print(f"回测日期: {DateHelper.get_end_date()}")
     print(f"最近一个工作日: {DateHelper.get_last_work_day()}")
+    
+# 美化时间格式
+def beautify_time(time: str, fmt: str = "%Y-%m-%d %H:%M:%S") -> str:
+    if not time:
+        return None
+    return pd.to_datetime(time).strftime(fmt)
