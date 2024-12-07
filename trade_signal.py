@@ -26,10 +26,8 @@ class ThresholdParams(SignalParams):
 
 # 信号参数常量定义
 BUY_POINT_PARAMS = SignalParams(threshold=90, percent=0.05, column='dz')     # 峰值回撤参数
-SELL_POINT_PARAMS = SignalParams(threshold=0, percent=0.05, column='dz')    # 波谷反弹参数
-#  todo  小幅拉升时回撤不够准确, 大幅拉升时候回撤响应慢
+SELL_POINT_PARAMS = SignalParams(threshold=-5, percent=0.05, column='dz')    # 波谷反弹参数
 QUICK_PULLUP_PARAMS = SignalParams(threshold=3, percent=0.015, column='sp')    # 拉升信号参数
-# 开始拉升, 指标值超过3时触发
 START_PULLUP_PARAMS = ThresholdParams(threshold=1, percent=0, column='sp', 
                                       drawdown_percent=0.01)    # 开始拉升参数
 
@@ -112,15 +110,18 @@ class ValleyBounceMonitor(SignalMonitorBase):
                 
             if value <= self.threshold:
                 if not self.is_monitoring:
-                    self.is_monitoring = True
                     self.min_value = value
-                elif value < self.min_value:
+                    self.is_monitoring = True
+                if value < self.min_value:
                     self.min_value = value
                 
 
             if self.is_monitoring and not self.notified:
-                bounce = (value - self.min_value) / self.min_value
-                if bounce >= self.percent:
+                if self.min_value == 0:
+                    bounce = value - self.min_value
+                else:
+                    bounce = (value - self.min_value) / self.min_value
+                if abs(bounce) >= self.percent:
                     self.notified = True
                     return TradeSignal(stock_code, value, self.min_value, bounce, current_time)
             return None
