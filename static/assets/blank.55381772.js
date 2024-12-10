@@ -1,0 +1,1 @@
+import{h as n,q as o,B as t,z as r,y as a}from"./element-plus.0596f1e1.js";var s=n({name:"LayoutBlank",setup(){return{}}});function c(p,u,l,m,_,i){const e=o("router-view");return a(),t("div",null,[r(e)])}s.render=c;export{s as default};
