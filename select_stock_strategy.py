@@ -89,7 +89,7 @@ def check_hyg(stock, df, end_date=None):
     if after_cross_day_count > 0 and after_cross_day_volume  < before_cross_day_volume * after_cross_day_volume_factor:
         print(f"成交额不足: 阳线后成交额{after_cross_day_volume/100000000:.2f}亿小于阳线前成交额{before_cross_day_volume/100000000:.2f}亿的{after_cross_day_volume_factor}倍,{stock}")
         logging.info(f"成交额不足: 阳线后成交额{after_cross_day_volume/100000000:.2f}亿小于阳线前成交额{before_cross_day_volume/100000000:.2f}亿的{after_cross_day_volume_factor}倍,{stock}")
-        return False
+    #     return False
 
     # 阳线当天成交额是前2天平均的1.5倍以上
     avg_vol_before_cross_day = df.loc[cross_day.index[0]-3:cross_day.index[0]-1]['成交额'].mean() / 2
@@ -105,6 +105,7 @@ def check_hyg(stock, df, end_date=None):
         logging.info(f"阳线后出现大阴线: {','.join(f'{x*100:.2f}%' for x in after_cross_day['开收幅'])},{stock}")
         return False
     
+    
 
    #  过滤阳线后累计涨幅, 涨幅大于阈值
     last_close = df.iloc[-1]['收盘']
@@ -118,12 +119,6 @@ def check_hyg(stock, df, end_date=None):
         logging.info(f"涨幅兑现: 阳线后累计涨幅{increase_rate_after_cross_day*100:.2f}%,{stock}")
         return False
 
-
-
-
-
-
- 
 
 
     
@@ -162,8 +157,15 @@ def check_hyg(stock, df, end_date=None):
         return False
     
     
+     # 过滤天量收绿
+    after_cross_day['天量'] = (after_cross_day['成交额'] > cross_day_info['成交额'] * 2) & (after_cross_day['开收幅'] < -(0.1/100))
+    if after_cross_day['天量'].any():
+        print(f"天量收绿: {stock}")
+        logging.info(f"天量收绿: {stock}")
+        return False  
     
     df['strategy'] = '活跃股'
+    df['cross_day_increase_rate'] = increase_rate_after_cross_day
     print(f"=========>>>>>>>>>>>>选中活跃股，{stock}")
     logging.info(f"=========>>>>>>>>>>>>选中活跃股，{stock}")
     return True

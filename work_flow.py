@@ -59,7 +59,7 @@ def update_listen_stocks():
     # 转换为元组列表 
     stocks = [(tuple(x)[1], tuple(x)[2]) for x in subset.values]
     # 测试数据
-    # stocks = [( '000882', '华联股份'),( '300100', '双林股份'),]
+    # stocks = [( '605168', '引力传媒')]
     # 获取股票数据  
     stocks_data = data_fetcher.run(stocks)
     end = settings.config['end_date']
@@ -68,7 +68,20 @@ def update_listen_stocks():
     # head_dict = dict(islice(stocks_data.items(), 100))
     # zq4_results =  dict(filter(check_enter(end_date=end, strategy_fun=enter.check_ea), stocks_data.items()))
     # 筛选活跃股
-    hyg_results = dict(filter(check_enter(end_date=end, strategy_fun=enter.check_hyg), stocks_data.items()))
+    hyg_results = dict(
+        filter(
+            check_enter(end_date=end, strategy_fun=enter.check_hyg), 
+            stocks_data.items()
+        )
+    )
+    # 根据阳线涨幅排序
+    hyg_results = dict(
+        sorted(
+            hyg_results.items(),
+            key=lambda x: x[1]['cross_day_increase_rate'].iloc[-1],  
+            reverse=True  # 降序排序
+        )
+    )
     save_watch_stock(hyg_results)
     if len(hyg_results) > 0:
         hyg_msg = ''

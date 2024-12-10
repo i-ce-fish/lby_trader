@@ -28,7 +28,7 @@ class ThresholdParams(SignalParams):
 BUY_POINT_PARAMS = SignalParams(threshold=90, percent=0.05, column='dz')     # 峰值回撤参数
 SELL_POINT_PARAMS = SignalParams(threshold=-5, percent=0.05, column='dz')    # 波谷反弹参数
 QUICK_PULLUP_PARAMS = SignalParams(threshold=3, percent=0.015, column='sp')    # 拉升信号参数
-START_PULLUP_PARAMS = ThresholdParams(threshold=1, percent=0, column='sp', 
+START_PULLUP_PARAMS = ThresholdParams(threshold=3, percent=0, column='sp', 
                                       drawdown_percent=0.01)    # 开始拉升参数
 
 class SignalMonitorBase:
@@ -138,7 +138,7 @@ class ThresholdMonitor(SignalMonitorBase):
     def __init__(self, params: ThresholdParams, log: logging.Logger):
         super().__init__(params, log)
         self.max_value = None  # 记录触发后的最大值
-        self.drawdown_percent = params.drawdown_percent  # 回撤阈值，可以通过参数配置
+        # self.drawdown_percent = params.drawdown_percent  # 回撤阈值，可以通过参数配置
         
     def on_tick(self, df: pd.DataFrame, stock_code: str) -> Optional[TradeSignal]:
         try:
@@ -168,11 +168,11 @@ class ThresholdMonitor(SignalMonitorBase):
                 self.max_value = value
             
             # 检查回撤重置条件
-            if self.notified and self.max_value:
-                drawdown = (self.max_value - value) / self.max_value
-                if drawdown >= self.drawdown_percent:
-                    self._reset_state()
-                    self.max_value = None
+            # if self.notified and self.max_value:
+            #     drawdown = (self.max_value - value) / self.max_value
+            #     if drawdown >= self.drawdown_percent:
+            #         self._reset_state()
+            #         self.max_value = None
             
             # 当值低于阈值时重置状态
             if value < self.threshold:
