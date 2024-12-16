@@ -1,7 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
 from datetime import datetime
-import talib as tl
+import talib
 import pandas as pd
 import logging
 # 关闭 SettingWithCopyWarning 警告
@@ -84,6 +84,7 @@ def check_hyg(stock, df, end_date=None):
     after_cross_day_count = after_cross_day.shape[0]
     # 阳线后成交额总和
     after_cross_day_volume = after_cross_day['成交额'].sum()    
+
     # 阳线前成交额总和
     before_cross_day = df.loc[cross_day.index[0]-after_cross_day_count:cross_day.index[0]-1]
     before_cross_day_volume = before_cross_day['成交额'].sum()
@@ -171,15 +172,106 @@ def check_hyg(stock, df, end_date=None):
         print(f"{level}. 天量收绿: {stock}")
         logging.info(f"{level}. 天量收绿: {stock}")
         return False  
-    
+  
     df['strategy'] = '活跃股'
     df['cross_day_increase_rate'] = increase_rate_after_cross_day
     print(f"=========>>>>>>>>>>>>选中活跃股，{stock}")
     logging.info(f"=========>>>>>>>>>>>>选中活跃股，{stock}")
+
+    # 形态识别
+    check_pattern(after_cross_day.copy(), after_cross_day['开盘'], after_cross_day['最高'], after_cross_day['最低'], after_cross_day['收盘'])
+
     return True
 
+def check_pattern(df, open_values, high_values, low_values, close_values):
+    """识别K线形态
+    
+    Args:
+        df: DataFrame对象
+        open_values: 开盘价序列 
+        high_values: 最高价序列
+        low_values: 最低价序列
+        close_values: 收盘价序列
+        
+    Returns:
+        添加了形态识别结果的DataFrame
+    """
+    # 定义形态识别函数字典
+    pattern_funcs = {
+        '两只乌鸦': talib.CDL2CROWS,
+        '三只乌鸦': talib.CDL3BLACKCROWS,
+        '三内部上涨和下跌': talib.CDL3INSIDE,
+        '三线打击': talib.CDL3LINESTRIKE,
+        '三外部上涨和下跌': talib.CDL3OUTSIDE,
+        '南方三星': talib.CDL3STARSINSOUTH,
+        '三个白兵': talib.CDL3WHITESOLDIERS,
+        '弃婴': talib.CDLABANDONEDBABY,
+        '大敌当前': talib.CDLADVANCEBLOCK,
+        '捉腰带线': talib.CDLBELTHOLD,
+        '脱离': talib.CDLBREAKAWAY,
+        '收盘缺影线': talib.CDLCLOSINGMARUBOZU,
+        '藏婴吞没': talib.CDLCONCEALBABYSWALL,
+        '反击线': talib.CDLCOUNTERATTACK,
+        '乌云压顶': talib.CDLDARKCLOUDCOVER,
+        '十字': talib.CDLDOJI,
+        '十字星': talib.CDLDOJISTAR,
+        '蜻蜓十字': talib.CDLDRAGONFLYDOJI,
+        '吞噬模式': talib.CDLENGULFING,
+        '十字暮星': talib.CDLEVENINGDOJISTAR,
+        '暮星': talib.CDLEVENINGSTAR,
+        '跳空并列阳线': talib.CDLGAPSIDESIDEWHITE,
+        '墓碑十字': talib.CDLGRAVESTONEDOJI,
+        '锤头': talib.CDLHAMMER,
+        '上吊线': talib.CDLHANGINGMAN,
+        '母子线': talib.CDLHARAMI,
+        '十字孕线': talib.CDLHARAMICROSS,
+        '风高浪大线': talib.CDLHIGHWAVE,
+        '陷阱': talib.CDLHIKKAKE,
+        '修正陷阱': talib.CDLHIKKAKEMOD,
+        '家鸽': talib.CDLHOMINGPIGEON,
+        '三胞胎乌鸦': talib.CDLIDENTICAL3CROWS,
+        '颈内线': talib.CDLINNECK,
+        '倒锤头': talib.CDLINVERTEDHAMMER,
+        '反冲形态': talib.CDLKICKING,
+        '长缺影反冲': talib.CDLKICKINGBYLENGTH,
+        '梯底': talib.CDLLADDERBOTTOM,
+        '长脚十字': talib.CDLLONGLEGGEDDOJI,
+        '长蜡烛': talib.CDLLONGLINE,
+        '光头光脚': talib.CDLMARUBOZU,
+        '相同低价': talib.CDLMATCHINGLOW,
+        '铺垫': talib.CDLMATHOLD,
+        '十字晨星': talib.CDLMORNINGDOJISTAR,
+        '晨星': talib.CDLMORNINGSTAR,
+        '颈上线': talib.CDLONNECK,
+        '刺透形态': talib.CDLPIERCING,
+        '黄包车夫': talib.CDLRICKSHAWMAN,
+        '上升下降三法': talib.CDLRISEFALL3METHODS,
+        '分离线': talib.CDLSEPARATINGLINES,
+        '射击之星': talib.CDLSHOOTINGSTAR,
+        '短蜡烛': talib.CDLSHORTLINE,
+        '纺锤': talib.CDLSPINNINGTOP,
+        '停顿形态': talib.CDLSTALLEDPATTERN,
+        '条形三明治': talib.CDLSTICKSANDWICH,
+        '探水竿': talib.CDLTAKURI,
+        '跳空并列阴阳线': talib.CDLTASUKIGAP,
+        '插入': talib.CDLTHRUSTING,
+        '三星': talib.CDLTRISTAR,
+        '奇特三河床': talib.CDLUNIQUE3RIVER,
+        '向上跳空两乌鸦': talib.CDLUPSIDEGAP2CROWS,
+        '跳空三法': talib.CDLXSIDEGAP3METHODS
+    }
+    
+    # 批量计算各形态
+    for pattern_name, pattern_func in pattern_funcs.items():
+        df[pattern_name] = pattern_func(open_values, high_values, low_values, close_values)
+    # 统计结果
+    for key in pattern_funcs.items():
+        for index, value in enumerate(df[key[0]]):
+            if value != 0:
+                print(f"todo>>>>>>>>>>>>日期:{df['日期'][index]}, 值:{key[0]}-{value}")
+    return df
 
-
+    
 # 检查股票收盘价是否高于55日均线,  而且低于10均线, 
 # @param stock 股票代码
 # @param data 股票日线数据
@@ -198,8 +290,8 @@ def check_ea(stock, df, end_date=None, ema_days=20):
     # 计算移动平均线
     ema_tag = 'ema' + str(ema_days)
     #  20日指数移动平均线
-    df[ema_tag] = tl.EMA(df['收盘'],ema_days)
-    df['ma10'] = tl.MA(df['收盘'],10)
+    df[ema_tag] = talib.EMA(df['收盘'],ema_days)
+    df['ma10'] = talib.MA(df['收盘'],10)
 
     
     # 如果结束日期小于当前日期, 则只取结束日期之前的数据
@@ -255,7 +347,7 @@ def check_rsi_rebound(df,recent_data_count, period=6, threshold=5):
     threshold: RSI反弹阈值
     """
     # 计算RSI
-    df['rsi'] = tl.RSI(df['收盘'], timeperiod=period)
+    df['rsi'] = talib.RSI(df['收盘'], timeperiod=period)
     # 获取最近的RSI值
     recent_rsi = df['rsi'].tail(recent_data_count)
     # 找到最小值及其位置
@@ -307,7 +399,7 @@ def check_rebound(data, threshold=0.05):
 def check_continuous_volume(code_name, data, end_date=None, threshold=60, window_size=3):
     stock = code_name[0]
     name = code_name[1]
-    data['vol_ma5'] = pd.Series(tl.MA(data['成交量'].values, 5), index=data.index.values)
+    data['vol_ma5'] = pd.Series(talib.MA(data['成交量'].values, 5), index=data.index.values)
     if end_date is not None:
         mask = (data['日期'] <= end_date)
         data = data.loc[mask]
@@ -342,7 +434,7 @@ def check_ma(code_name, data, end_date=None, ma_days=250):
         return False
 
     ma_tag = 'ma' + str(ma_days)
-    data[ma_tag] = pd.Series(tl.MA(data['收盘'].values, ma_days), index=data.index.values)
+    data[ma_tag] = pd.Series(talib.MA(data['收盘'].values, ma_days), index=data.index.values)
 
     if end_date is not None:
         mask = (data['日期'] <= end_date)
@@ -376,7 +468,7 @@ def check_volume(code_name, data, end_date=None, threshold=60):
     if len(data) < threshold:
         logging.debug("{0}:样本小于250天...\n".format(code_name))
         return False
-    data['vol_ma5'] = pd.Series(tl.MA(data['成交量'].values, 5), index=data.index.values)
+    data['vol_ma5'] = pd.Series(talib.MA(data['成交量'].values, 5), index=data.index.values)
 
     if end_date is not None:
         mask = (data['日期'] <= end_date)

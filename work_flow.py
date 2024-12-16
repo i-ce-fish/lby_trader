@@ -59,7 +59,13 @@ def update_listen_stocks():
     # 转换为元组列表 
     stocks = [(tuple(x)[1], tuple(x)[2]) for x in subset.values]
     # 测试数据
-    # stocks = [( '605168', '引力传媒')]
+    # stocks = [('605168', '引力传媒'),
+    #           ('002899','英派斯'),
+    #           ('605318','法狮龙'),
+    #           ('002130','沃尔核材'),
+    #           ('000985','大庆华科'),
+    #           ('300436','庆生堂')
+    #           ]
     # 获取股票数据  
     stocks_data = data_fetcher.run(stocks)
     end = settings.config['end_date']
@@ -143,7 +149,7 @@ def get_all_stocks():
     """获取所有主板+创业板股票数据"""
     all_data = ak.stock_zh_a_spot_em()
     if all_data is None:
-        logging.error("获取所���股票数据失败")
+        logging.error("获取所有股票数据失败")
         return []
     logging.info(f"获取所有股票数据成功, 数量: {len(all_data)}")
     # 使用正则表达式过滤掉北交所(8/9开头)、科创板(688开头)和其他特殊板块(4开头)的股票

@@ -152,7 +152,7 @@ class ThresholdMonitor(SignalMonitorBase):
             self.latest_time = current_time
             
             # 当值超过阈值且未通知时触发信号
-            if value >= self.threshold and not self.notified:
+            if value > self.threshold and not self.notified:
                 self.notified = True
                 self.max_value = value
                 return TradeSignal(
