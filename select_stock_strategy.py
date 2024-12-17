@@ -85,6 +85,7 @@ def check_hyg(stock, df, end_date=None):
     # 阳线后成交额总和
     after_cross_day_volume = after_cross_day['成交额'].sum()    
 
+ 
     # 阳线前成交额总和
     before_cross_day = df.loc[cross_day.index[0]-after_cross_day_count:cross_day.index[0]-1]
     before_cross_day_volume = before_cross_day['成交额'].sum()
@@ -178,25 +179,21 @@ def check_hyg(stock, df, end_date=None):
     print(f"=========>>>>>>>>>>>>选中活跃股，{stock}")
     logging.info(f"=========>>>>>>>>>>>>选中活跃股，{stock}")
 
-    # 形态识别
-    check_pattern(after_cross_day.copy(), after_cross_day['开盘'], after_cross_day['最高'], after_cross_day['最低'], after_cross_day['收盘'])
+    # 形态识别,ps需要冗余的数据才能识别
+    df_talib = df.loc[cross_day.index[0]-5:]
+    check_pattern(df_talib, df_talib['开盘'], df_talib['最高'], df_talib['最低'], df_talib['收盘'])
+    # 统计结果
+    pattern_funcs = get_pattern()
+    for index, value in df_talib.iterrows():
+        for key in pattern_funcs.items():
+            if value[key[0]] != 0:
+                print(f"日期:{df['日期'][index]}, 值:{key[0]}{value[key[0]]}")
+                logging.info(f"日期:{df['日期'][index]}, 值:{key[0]}{value[key[0]]}")
 
     return True
 
-def check_pattern(df, open_values, high_values, low_values, close_values):
-    """识别K线形态
-    
-    Args:
-        df: DataFrame对象
-        open_values: 开盘价序列 
-        high_values: 最高价序列
-        low_values: 最低价序列
-        close_values: 收盘价序列
-        
-    Returns:
-        添加了形态识别结果的DataFrame
-    """
-    # 定义形态识别函数字典
+def get_pattern():
+     # 定义形态识别函数字典
     pattern_funcs = {
         '两只乌鸦': talib.CDL2CROWS,
         '三只乌鸦': talib.CDL3BLACKCROWS,
@@ -260,15 +257,24 @@ def check_pattern(df, open_values, high_values, low_values, close_values):
         '向上跳空两乌鸦': talib.CDLUPSIDEGAP2CROWS,
         '跳空三法': talib.CDLXSIDEGAP3METHODS
     }
+    return pattern_funcs
+
+def check_pattern(df, open_values, high_values, low_values, close_values):
+    """识别K线形态
     
-    # 批量计算各形态
+    Args:
+        df: DataFrame对象
+        open_values: 开盘价序列 
+        high_values: 最高价序列
+        low_values: 最低价序列
+        close_values: 收盘价序列
+        
+    Returns:
+        添加了形态识别结果的DataFrame
+    """
+    pattern_funcs = get_pattern()
     for pattern_name, pattern_func in pattern_funcs.items():
         df[pattern_name] = pattern_func(open_values, high_values, low_values, close_values)
-    # 统计结果
-    for key in pattern_funcs.items():
-        for index, value in enumerate(df[key[0]]):
-            if value != 0:
-                print(f"todo>>>>>>>>>>>>日期:{df['日期'][index]}, 值:{key[0]}-{value}")
     return df
 
     

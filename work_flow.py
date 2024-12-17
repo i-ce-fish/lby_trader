@@ -59,12 +59,9 @@ def update_listen_stocks():
     # 转换为元组列表 
     stocks = [(tuple(x)[1], tuple(x)[2]) for x in subset.values]
     # 测试数据
-    # stocks = [('605168', '引力传媒'),
-    #           ('002899','英派斯'),
-    #           ('605318','法狮龙'),
-    #           ('002130','沃尔核材'),
+    # stocks = [
     #           ('000985','大庆华科'),
-    #           ('300436','庆生堂')
+    #           ('603273','111')
     #           ]
     # 获取股票数据  
     stocks_data = data_fetcher.run(stocks)
