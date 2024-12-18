@@ -1,3 +1,4 @@
+import math
 import time
 import datetime
 from typing import List, Dict
@@ -46,10 +47,11 @@ class Strategy(StrategyTemplate):
             ddt_df = ddt(data[stock_code])
             # 过滤出最近一个工作日00:00:00到23:59:59之间的数据
             latest_day = data[stock_code].index[-1]
-            start_time = latest_day.replace(hour=0, minute=0, second=0, microsecond=0)
-            end_time = latest_day.replace(hour=23, minute=59, second=59, microsecond=999999)
+            start_time = latest_day.replace(hour=9, minute=30, second=0, microsecond=0)
+            start_time_str = start_time.strftime('%Y-%m-%d %H:%M:%S')
+            end_time = latest_day.replace(hour=15, minute=0, second=0, microsecond=0)
             # 过滤索引为今天的数据
-            latest_data = ddt_df.loc[start_time.strftime('%Y-%m-%d %H:%M:%S'):end_time.strftime('%Y-%m-%d %H:%M:%S')]
+            latest_data = ddt_df.loc[start_time_str:end_time.strftime('%Y-%m-%d %H:%M:%S')]
             # 根据ddt_line绘制曲线，
             stock_info = get_stock_info(stock_code)
             if stock_info:
@@ -57,6 +59,23 @@ class Strategy(StrategyTemplate):
             else:
                 stock_id = stock_code
             plot_basic(latest_data,latest_day.strftime('%Y-%m-%d')+'_'+stock_id+'.png')
+
+            # 涨停判断数据预处理
+            # 昨天收盘价
+            yesterday_info = ddt_df.loc[:start_time_str].iloc[-2]
+            yesterday_close = yesterday_info.close
+            # 最新价格
+            latest_info = latest_data.iloc[-1]
+            # 涨停判断
+            max_price = 0
+            if stock_code.startswith('688') or stock_code.startswith('300'):
+                # 保留2位小数, 但不四舍五入
+                max_price = math.floor( 1.2 * yesterday_close * 10 ** 2) / 10 ** 2
+            else:
+                max_price = math.floor( 1.1 * yesterday_close * 10 ** 2) / 10 ** 2
+            latest_data['max_price'] = max_price
+           
+
             signals = self.signal_manager.check_signals(latest_data, stock_code)
             if len(signals)>0 :
                 latest_info = latest_data.iloc[-1]
