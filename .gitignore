@@ -71,3 +71,5 @@ node_modules
 dist
 tushare.json
 pytrader.db
+*.log
+tdx/images/

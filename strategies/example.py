@@ -41,7 +41,6 @@ class Strategy(StrategyTemplate):
             self.quotation_engine.watch(stock_code)
 
     def on_bar(self, context: Context, data: Dict[str, DataFrame]):
-        self.log.info("on_bar")
         self.update_watch_stocks()
         for stock_code in self.watch_stocks:
             ddt_df = ddt(data[stock_code])
@@ -52,13 +51,13 @@ class Strategy(StrategyTemplate):
             end_time = latest_day.replace(hour=15, minute=0, second=0, microsecond=0)
             # 过滤索引为今天的数据
             latest_data = ddt_df.loc[start_time_str:end_time.strftime('%Y-%m-%d %H:%M:%S')]
-            # 根据ddt_line绘制曲线，
             stock_info = get_stock_info(stock_code)
             if stock_info:
                 stock_id = stock_info.name
             else:
                 stock_id = stock_code
-            plot_basic(latest_data,latest_day.strftime('%Y-%m-%d')+'_'+stock_id+'.png')
+            # 根据ddt_line绘制曲线，调试时需要
+            # plot_basic(latest_data,latest_day.strftime('%Y-%m-%d')+'_'+stock_id+'.png')
 
             # 涨停判断数据预处理
             # 昨天收盘价
