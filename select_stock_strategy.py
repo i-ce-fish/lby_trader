@@ -15,7 +15,7 @@ def check_hyg(stock, df, end_date=None):
     # todo 环境系数 通过主板+创业板+涨跌家数+平均股价+涨跌停家属联合判断判断环境
     env_factor = 1.0
     # 大阳线当天涨幅阈值(%)
-    cross_day_threshold = 8 * env_factor
+    cross_day_threshold = 6 * env_factor
     # 大阳线当天成交额系数
     cross_day_volume_factor = 1.5 * env_factor
     # 阳线后平均成交额系数
@@ -85,7 +85,15 @@ def check_hyg(stock, df, end_date=None):
     # 阳线后成交额总和
     after_cross_day_volume = after_cross_day['成交额'].sum()    
 
- 
+
+    level += 1
+    # 过滤大阳线当天涨幅小于5
+    if cross_day_info['涨跌幅'] <  5:
+        print(f"{level}. 阳线当天涨幅不足: {cross_day_info['涨跌幅']}小于5%,{stock}")
+        logging.info(f"{level}. 阳线当天涨幅不足: {cross_day_info['涨跌幅']}小于5%,{stock}")
+        return False
+
+    level += 1
     # 阳线前成交额总和
     before_cross_day = df.loc[cross_day.index[0]-after_cross_day_count:cross_day.index[0]-1]
     before_cross_day_volume = before_cross_day['成交额'].sum()
@@ -175,7 +183,7 @@ def check_hyg(stock, df, end_date=None):
         return False  
   
     df['strategy'] = '活跃股'
-    df['cross_day_increase_rate'] = increase_rate_after_cross_day
+    df['cross_day_increase_rate'] = cross_day_info['涨跌幅']
     print(f"=========>>>>>>>>>>>>选中活跃股，{stock}")
     logging.info(f"=========>>>>>>>>>>>>选中活跃股，{stock}")
 

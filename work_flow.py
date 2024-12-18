@@ -82,14 +82,18 @@ def update_listen_stocks():
         sorted(
             hyg_results.items(),
             key=lambda x: x[1]['cross_day_increase_rate'].iloc[-1],  
-            reverse=True  # 降序排序
+            reverse=True  # 降序
         )
     )
-    save_watch_stock(hyg_results)
+    # 只保留前5个结果
+    hyg_watch = dict(list(hyg_results.items())[:5])
+    save_watch_stock(hyg_watch)
     if len(hyg_results) > 0:
         hyg_msg = ''
-        for stock in hyg_results.keys():
+        for index,stock in enumerate(hyg_results.keys()):
             hyg_msg += f"{stock[1].ljust(10)}\t{stock[0]}\n"
+            if index == 4:
+                hyg_msg += '\-\-\-\-\-\n'
         wx_pusher.wx_push(f'[选股] \n{hyg_msg}\n{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
     
     # 更新个股行情数据
