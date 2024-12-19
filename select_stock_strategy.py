@@ -15,7 +15,7 @@ def check_hyg(stock, df, end_date=None):
     # todo 环境系数 通过主板+创业板+涨跌家数+平均股价+涨跌停家属联合判断判断环境
     env_factor = 1.0
     # 大阳线当天涨幅阈值(%)
-    cross_day_threshold = 7 * env_factor
+    cross_day_threshold = 8 * env_factor
     # 大阳线当天成交额系数
     cross_day_volume_factor = 1.5 * env_factor
     # 阳线后平均成交额系数
@@ -103,11 +103,19 @@ def check_hyg(stock, df, end_date=None):
         return False
 
     level += 1
+    # 阳线当天成交额2亿以上
+    if cross_day_info['成交额'] < 200000000:
+        print(f"{level}. 成交额不足: 阳线当天成交额{cross_day_info['成交额']/100000000:.2f}亿小于2亿,{stock}")
+        logging.info(f"{level}. 成交额不足: 阳线当天成交额{cross_day_info['成交额']/100000000:.2f}亿小于2亿,{stock}")
+        return False
+
+
+    level += 1
     # 阳线当天成交额是前2天平均的1.5倍以上
     avg_vol_before_cross_day = df.loc[cross_day.index[0]-3:cross_day.index[0]-1]['成交额'].mean() / 2
     if cross_day_info['成交额'] < avg_vol_before_cross_day * cross_day_volume_factor:
-        print(f"{level}. 成交额不足: 阳线当天成交额{cross_day_info['成交额']/100000000:.2f}小于阳线前2天平均的{cross_day_volume_factor}倍,{stock}")
-        logging.info(f"{level}. 成交额不足: 阳线当天成交额{cross_day_info['成交额']/100000000:.2f}小于阳线前2天平均的{cross_day_volume_factor}倍,{stock}")
+        print(f"{level}. 成交额倍数不足: 阳线当天成交额{cross_day_info['成交额']/100000000:.2f}小于阳线前2天平均的{cross_day_volume_factor}倍,{stock}")
+        logging.info(f"{level}. 成交额倍数不足: 阳线当天成交额{cross_day_info['成交额']/100000000:.2f}小于阳线前2天平均的{cross_day_volume_factor}倍,{stock}")
         return False
 
     level += 1

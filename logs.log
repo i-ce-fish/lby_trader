@@ -3995,3 +3995,86 @@ TypeError: list indices must be integers or slices, not list
 [2024-12-18 21:19:15.184476] INFO: 主引擎: 推送消息: [涨停] 宁波富邦: 由价格10.69在15:00:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283247130, 'messageContentId': 1285834246, 'sendRecordId': 1283247130, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
 [2024-12-18 21:29:30.694851] WARNING: 主引擎: 卸载策略: example strategy
 [2024-12-18 21:29:32.710665] INFO: 主引擎: 加载策略: example
+[2024-12-19 09:30:45.967193] INFO: 主引擎: 选择了无交易模式
+[2024-12-19 09:30:45.968196] INFO: 主引擎: 启动主引擎
+[2024-12-19 09:30:45.971197] INFO: 主引擎: 定时任务已启动
+[2024-12-19 09:30:45.971197] INFO: 主引擎: 定时任务已启动
+[2024-12-19 09:30:46.508587] INFO: 主引擎: 加载策略: example
+[2024-12-19 09:30:46.508587] WARNING: 主引擎: 启用了动态加载策略功能
+[2024-12-19 09:30:46.509589] INFO: 主引擎: 选股回测日期: None
+[2024-12-19 09:33:05.973567] INFO: 主引擎: 推送消息: [买点] 宁波富邦: 由价格10.54在09:33:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283824806, 'messageContentId': 1286566700, 'sendRecordId': 1283824806, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 09:45:00.012141] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-19 09:45:32.502135] INFO: 主引擎: 推送消息: [开始拉升] 露笑科技: 由价格8.12在09:46:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283850809, 'messageContentId': 1286581683, 'sendRecordId': 1283850809, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 09:47:14.597483] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-19 09:47:47.499194] INFO: 主引擎: 推送消息: [结束拉升] 露笑科技: 由价格8.14在09:48:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283857053, 'messageContentId': 1286584310, 'sendRecordId': 1283857053, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 09:47:48.574710] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '600396'\n"]
+[2024-12-19 09:50:00.012343] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-19 09:51:38.998482] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-19 09:56:50.647465] INFO: 主引擎: 推送消息: [开始拉升 涨停] 申达股份: 由价格5.15在09:57:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283878856, 'messageContentId': 1286596730, 'sendRecordId': 1283878856, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 10:00:00.006844] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-19 10:01:44.777409] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-19 10:02:25.610715] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '002449'\n"]
+[2024-12-19 10:03:33.522182] INFO: 主引擎: 推送消息: [开始拉升 涨停] 国星光电: 由价格9.63在10:04:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283900231, 'messageContentId': 1286609220, 'sendRecordId': 1283900231, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 10:03:34.090221] INFO: 主引擎: 推送消息: [开始拉升 涨停] 高澜股份: 由价格19.8在10:04:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283900241, 'messageContentId': 1286609236, 'sendRecordId': 1283900241, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 10:05:00.007014] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-19 10:06:43.019315] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-19 10:06:59.921198] INFO: 主引擎: 推送消息: [结束拉升] 国星光电: 由价格9.63在10:07:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283908610, 'messageContentId': 1286614709, 'sendRecordId': 1283908610, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 10:07:00.097147] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '300425'\n"]
+[2024-12-19 10:09:16.183156] INFO: 主引擎: 推送消息: [买点] 回天新材: 由价格9.55在10:10:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283916513, 'messageContentId': 1286618322, 'sendRecordId': 1283916513, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 10:10:24.369753] INFO: 主引擎: 推送消息: [卖点] 国星光电: 由价格9.63在10:11:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283918986, 'messageContentId': 1286620170, 'sendRecordId': 1283918986, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 10:10:26.243273] INFO: 主引擎: 推送消息: [结束拉升] 申达股份: 由价格5.16在10:11:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283919008, 'messageContentId': 1286620207, 'sendRecordId': 1283919008, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 10:13:51.266201] INFO: 主引擎: 推送消息: [买点] 天元智能: 由价格20.54在10:14:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283926423, 'messageContentId': 1286625267, 'sendRecordId': 1283926423, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 10:14:57.731025] INFO: 主引擎: 推送消息: [开始拉升] 中建环能: 由价格6.73在10:15:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283929685, 'messageContentId': 1286626928, 'sendRecordId': 1283929685, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 10:18:21.391507] INFO: 主引擎: 推送消息: [结束拉升] 中建环能: 由价格6.71在10:18:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283935746, 'messageContentId': 1286631943, 'sendRecordId': 1283935746, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 10:20:38.119083] INFO: 主引擎: 推送消息: [卖点] 高澜股份: 由价格19.8在10:21:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283939721, 'messageContentId': 1286635235, 'sendRecordId': 1283939721, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 10:27:31.225738] INFO: 主引擎: 推送消息: [买点] 乐心医疗: 由价格16.33在10:28:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283956702, 'messageContentId': 1286644670, 'sendRecordId': 1283956702, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 10:27:32.249798] INFO: 主引擎: 推送消息: [买点] 华电辽能: 由价格3.08在10:28:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1283956725, 'messageContentId': 1286644686, 'sendRecordId': 1283956725, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 10:30:00.013880] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-19 11:11:42.046722] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '002929'\n"]
+[2024-12-19 11:11:45.771547] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-19 11:12:50.918281] INFO: 主引擎: 推送消息: [涨停] 润建股份: 由价格33.87在11:13:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284032478, 'messageContentId': 1286705429, 'sendRecordId': 1284032478, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:12:52.678830] INFO: 主引擎: 推送消息: [涨停后回落] 申达股份: 由价格4.87在11:13:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284032505, 'messageContentId': 1286705457, 'sendRecordId': 1284032505, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:13:07.054788] INFO: 主引擎: 选择了无交易模式
+[2024-12-19 11:13:07.055788] INFO: 主引擎: 启动主引擎
+[2024-12-19 11:13:07.067791] INFO: 主引擎: 定时任务已启动
+[2024-12-19 11:13:07.067791] INFO: 主引擎: 定时任务已启动
+[2024-12-19 11:13:07.927932] INFO: 主引擎: 加载策略: example
+[2024-12-19 11:13:07.927932] WARNING: 主引擎: 启用了动态加载策略功能
+[2024-12-19 11:13:07.927932] INFO: 主引擎: 选股回测日期: None
+[2024-12-19 11:13:16.106314] INFO: 主引擎: 推送消息: [开始拉升 涨停] 国星光电: 由价格9.63在11:13:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284033009, 'messageContentId': 1286705871, 'sendRecordId': 1284033009, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:13:16.672013] INFO: 主引擎: 推送消息: [涨停] 润建股份: 由价格33.87在11:13:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284033018, 'messageContentId': 1286705885, 'sendRecordId': 1284033018, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:13:17.291659] INFO: 主引擎: 推送消息: [开始拉升 涨停] 高澜股份: 由价格19.8在11:13:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284033025, 'messageContentId': 1286705895, 'sendRecordId': 1284033025, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:13:22.029892] INFO: 主引擎: 推送消息: [涨停后回落] 申达股份: 由价格4.89在11:14:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284033792, 'messageContentId': 1286705983, 'sendRecordId': 1284033792, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:16:45.974070] INFO: 主引擎: 推送消息: [开始拉升] 国星光电: 由价格9.63在11:17:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284040938, 'messageContentId': 1286710023, 'sendRecordId': 1284040938, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:19:05.160467] INFO: 主引擎: 推送消息: [买点] 华电辽能: 由价格3.04在11:19:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284045637, 'messageContentId': 1286712559, 'sendRecordId': 1284045637, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:19:08.642576] INFO: 主引擎: 选择了无交易模式
+[2024-12-19 11:19:08.645571] INFO: 主引擎: 启动主引擎
+[2024-12-19 11:19:08.653574] INFO: 主引擎: 定时任务已启动
+[2024-12-19 11:19:08.653574] INFO: 主引擎: 定时任务已启动
+[2024-12-19 11:19:10.152148] INFO: 主引擎: 加载策略: example
+[2024-12-19 11:19:10.152148] WARNING: 主引擎: 启用了动态加载策略功能
+[2024-12-19 11:19:10.153149] INFO: 主引擎: 选股回测日期: None
+[2024-12-19 11:23:36.889025] INFO: 主引擎: 推送消息: [买点] 申达股份: 由价格4.93在11:24:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284051771, 'messageContentId': 1286717501, 'sendRecordId': 1284051771, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:24:00.340925] INFO: 主引擎: 推送消息: [开始拉升 涨停] 国星光电: 由价格9.63在11:19:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284052047, 'messageContentId': 1286717854, 'sendRecordId': 1284052047, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:24:06.208332] INFO: 主引擎: 推送消息: [涨停] 润建股份: 由价格33.87在11:19:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284052121, 'messageContentId': 1286717995, 'sendRecordId': 1284052121, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:24:20.634417] INFO: 主引擎: 推送消息: [开始拉升 涨停] 高澜股份: 由价格19.8在11:19:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284053055, 'messageContentId': 1286718303, 'sendRecordId': 1284053055, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:26:21.714779] INFO: 主引擎: 选择了无交易模式
+[2024-12-19 11:26:21.718778] INFO: 主引擎: 启动主引擎
+[2024-12-19 11:26:21.726782] INFO: 主引擎: 定时任务已启动
+[2024-12-19 11:26:21.726782] INFO: 主引擎: 定时任务已启动
+[2024-12-19 11:26:23.343606] INFO: 主引擎: 加载策略: example
+[2024-12-19 11:26:23.344606] WARNING: 主引擎: 启用了动态加载策略功能
+[2024-12-19 11:26:23.345606] INFO: 主引擎: 选股回测日期: None
+[2024-12-19 11:26:58.100965] INFO: 主引擎: 推送消息: [买点] 露笑科技: 由价格7.88在11:27:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284061299, 'messageContentId': 1286721594, 'sendRecordId': 1284061299, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:27:26.276918] INFO: 主引擎: 推送消息: [开始拉升 涨停] 国星光电: 由价格9.63在11:27:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284064784, 'messageContentId': 1286722248, 'sendRecordId': 1284064784, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:27:32.925118] INFO: 主引擎: 推送消息: [涨停] 润建股份: 由价格33.87在11:27:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284064894, 'messageContentId': 1286722371, 'sendRecordId': 1284064894, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:27:51.873097] INFO: 主引擎: 推送消息: [开始拉升 涨停] 高澜股份: 由价格19.8在11:27:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284065213, 'messageContentId': 1286722771, 'sendRecordId': 1284065213, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:28:09.650833] INFO: 主引擎: 推送消息: [涨停后回落] 申达股份: 由价格4.93在11:27:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1284065519, 'messageContentId': 1286723144, 'sendRecordId': 1284065519, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-19 11:31:23.867263] DEBUG: 主引擎: 开始关闭进程...
+[2024-12-19 11:31:24.226586] DEBUG: 主引擎: 开始关闭策略...
+[2024-12-19 11:31:24.226586] INFO: 主引擎: shutdown
+[2024-12-19 11:31:24.327696] INFO: 主引擎: 定时任务进程已停止
+[2024-12-19 11:31:45.845594] INFO: 主引擎: 选择了无交易模式
+[2024-12-19 11:31:45.846595] INFO: 主引擎: 启动主引擎
+[2024-12-19 11:31:45.849595] INFO: 主引擎: 定时任务已启动
+[2024-12-19 11:31:45.849595] INFO: 主引擎: 定时任务已启动
