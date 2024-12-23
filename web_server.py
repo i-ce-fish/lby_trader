@@ -171,4 +171,4 @@ async def add_watch_stock(code: str = Body(...),strategy: str = Body(default='�
     return {"message": "添加成功" , "data": insert_result}
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
