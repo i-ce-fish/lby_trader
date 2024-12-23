@@ -67,7 +67,7 @@ class Strategy(StrategyTemplate):
             latest_info = latest_data.iloc[-1]
             # 涨停判断
             max_price = 0
-            if stock_code.startswith('688') or stock_code.startswith('300'):
+            if stock_code.startswith('688') or stock_code.startswith('300') or stock_code.startswith('301'):
                 # 保留2位小数, 但不四舍五入
                 max_price = math.floor( 1.2 * yesterday_close * 10 ** 2) / 10 ** 2
             else:
