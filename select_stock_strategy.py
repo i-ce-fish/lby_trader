@@ -20,6 +20,8 @@ def check_hyg(stock, df, end_date=None):
     cross_day_volume_factor = 1.5 * env_factor
     # 阳线后平均成交额系数
     after_cross_day_volume_factor = 1.5 * env_factor
+    # 阳线当天换手率阈值(%)
+    cross_day_turnover_threshold = 3.5 * env_factor
     # 兑现涨幅阈值(.)
     trigger_threshold = 0.1 * env_factor
     # 大阴线跌幅阈值(.)
@@ -93,6 +95,13 @@ def check_hyg(stock, df, end_date=None):
         logging.info(f"{level}. 阳线当天涨幅不足: {cross_day_info['涨跌幅']}小于5%,{stock}")
         return False
 
+    level += 1
+    # 阳线当天换手率
+    if cross_day_info['换手率'] < cross_day_turnover_threshold:
+        print(f"{level}. 换手率不足: 阳线当天换手率{cross_day_info['换手率']}%小于{cross_day_turnover_threshold}%,{stock}")
+        logging.info(f"{level}. 换手率不足: 阳线当天换手率{cross_day_info['换手率']}%小于{cross_day_turnover_threshold}%,{stock}")
+        return False
+    
     level += 1
     # 阳线前成交额总和
     before_cross_day = df.loc[cross_day.index[0]-after_cross_day_count:cross_day.index[0]-1]
