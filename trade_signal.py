@@ -262,8 +262,8 @@ class SignalMonitorManager:
         signals = []
         
         # 检查峰值回撤信号
-        if buy_point_signal := self.buy_point_monitors[stock_code].on_tick(df, stock_code):
-            signals.append(('买点', buy_point_signal))
+        # if buy_point_signal := self.buy_point_monitors[stock_code].on_tick(df, stock_code):
+            # signals.append(('买点', buy_point_signal))
             
         # 检查波谷反弹信号
         if sell_point_signal := self.sell_point_monitors[stock_code].on_tick(df, stock_code):

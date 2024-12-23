@@ -60,8 +60,7 @@ def update_listen_stocks():
     stocks = [(tuple(x)[1], tuple(x)[2]) for x in subset.values]
     # 测试数据
     # stocks = [
-    #           ('000985','大庆华科'),
-    #           ('603273','111')
+    #           ('300499','测试'),
     #           ]
     # 获取股票数据  
     stocks_data = data_fetcher.run(stocks)
@@ -85,9 +84,11 @@ def update_listen_stocks():
             reverse=True  # 降序
         )
     )
-    # 只保留前5个结果
+    # 过滤数据中以监听的股票,并只保留前3个结果
+    # codes = {item.code for item in get_watching_or_stopped_stocks()}
+    # hyg_watch = dict(filter(lambda x: x[0] in codes, hyg_results.items()))
     hyg_watch = dict(list(hyg_results.items())[:5])
-    save_watch_stock(hyg_watch)
+    save_watch_stock(hyg_watch) 
     if len(hyg_results) > 0:
         hyg_msg = ''
         for index,stock in enumerate(hyg_results.keys()):

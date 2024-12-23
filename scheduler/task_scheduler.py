@@ -42,8 +42,8 @@ class TaskScheduler:
             self.update_listening_stocks_job,
             CronTrigger(
                 day_of_week='mon-fri', 
-                hour='9,10,12,13,14',
-                minute='45,15,00,45,50'),           
+                hour='9,10,10,10,12,13,14',
+                minute='45,00,15,45,00,45,50'),           
             id='update_listening_stocks_job',
             max_instances=1,        # 最大实例数为1，防止任务重复执行
             coalesce=True          # 合并错过的任务

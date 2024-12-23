@@ -39,6 +39,7 @@ def check_hyg(stock, df, end_date=None):
     df: DataFrame，需要包含 'open' 和 'close' 列
     """
     # 计算各均线
+    df['MA4'] = df['收盘'].rolling(window=4).mean()
     df['MA5'] = df['收盘'].rolling(window=5).mean()
     df['MA10'] = df['收盘'].rolling(window=10).mean()
     df['MA20'] = df['收盘'].rolling(window=20).mean()
@@ -64,7 +65,7 @@ def check_hyg(stock, df, end_date=None):
     df['cross_ma_exist'] = df['cross_ma'].rolling(window=cross_ma_window).sum() > 0
     
     # 均线多头排列条件
-    df['MA_trend'] = (df['MA5'] > df['MA10']) & (df['MA10'] > df['MA30'])
+    df['MA_trend'] = (df['MA4'] > df['MA10']) & (df['MA10'] > df['MA30'])
     
     # 最终XG条件
     df['yx_signal'] = df['cross_ma_exist'] & df['MA_trend']
