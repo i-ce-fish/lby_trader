@@ -25,7 +25,7 @@ class ThresholdParams(SignalParams):
     drawdown_percent: float = 0.01  # 回撤阈值，默认1%, 回撤超过阈值后重置通知状态
 
 # 信号参数常量定义
-BUY_POINT_PARAMS = SignalParams(threshold=90, percent=0.05, column='dz')     # 峰值回撤参数
+BUY_POINT_PARAMS = SignalParams(threshold=90, percent=0.02, column='dz')     # 峰值回撤参数
 SELL_POINT_PARAMS = SignalParams(threshold=-5, percent=0.05, column='dz')    # 波谷反弹参数
 QUICK_PULLUP_PARAMS = SignalParams(threshold=3, percent=0.015, column='sp')    # 拉升信号参数
 START_PULLUP_PARAMS = SignalParams(threshold=3, percent=0, column='sp')    # 开始拉升参数
@@ -250,7 +250,7 @@ class SignalMonitorManager:
         #  涨停后回落监控
         self.zt_fall_monitors: dict[str, ZtFallMonitor] = {}
         
-    def check_signals(self, df: pd.DataFrame, stock_code: str) -> List[Tuple[str, TradeSignal]]:
+    def check_signals(self, df: pd.DataFrame, stock_code: str, is_buy_monitor: bool) -> List[Tuple[str, TradeSignal]]:
         # 初始化监控器
         if stock_code not in self.buy_point_monitors:
             self.buy_point_monitors[stock_code] = PeakDrawdownMonitor(BUY_POINT_PARAMS, self.log)
@@ -262,8 +262,9 @@ class SignalMonitorManager:
         signals = []
         
         # 检查峰值回撤信号
-        # if buy_point_signal := self.buy_point_monitors[stock_code].on_tick(df, stock_code):
-            # signals.append(('买点', buy_point_signal))
+        if not is_buy_monitor:
+            if buy_point_signal := self.buy_point_monitors[stock_code].on_tick(df, stock_code):
+                signals.append(('买点', buy_point_signal))
             
         # 检查波谷反弹信号
         if sell_point_signal := self.sell_point_monitors[stock_code].on_tick(df, stock_code):

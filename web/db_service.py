@@ -22,7 +22,7 @@ class DbService:
     def get_watch_stocks(self,watching:str, user: str | None = None) -> List[WatchStock]:
         return sqlite_utils.get_watch_stocks(watching, user)
 
-    def update_watch_stock_status(self, id: int, status: str) -> WatchStocks:
+    def update_watch_stock_status(self, id: int, status: str) -> bool:
         if status == '监听中':
             res = sqlite_utils.start_watch_stock(id)
         elif status == '停止监听':
@@ -30,6 +30,9 @@ class DbService:
         elif status == '结束监听':
             res = sqlite_utils.end_watch_stock(id)
         return res
+
+    def update_watch_stock_buy_monitor(self, id: int, is_buy_monitor: int) -> WatchStocks:
+        return sqlite_utils.update_watch_stock_buy_monitor(id, is_buy_monitor)
 
     def add_watch_stock(self, watch_stock: WatchStock) -> WatchStocks:
         return sqlite_utils.add_watch_stock_by_user(watch_stock)   

@@ -170,5 +170,10 @@ async def add_watch_stock(code: str = Body(...),strategy: str = Body(default='�
     insert_result = db_service.add_watch_stock(watch_stock)
     return {"message": "添加成功" , "data": insert_result}
 
+@app.post("/api/updateWatchStockBuyMonitor")
+async def update_watch_stock_buy_monitor(id: int = Body(...), is_buy_monitor: int = Body(...)):
+    return db_service.update_watch_stock_buy_monitor(id, is_buy_monitor)
+
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

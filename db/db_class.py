@@ -49,6 +49,7 @@ class WatchStock(BaseModel):
     current_price: Optional[float] = None  # 最新价格
     create_time: Optional[datetime] = None  # 创建时间
     update_time: Optional[datetime] = None  # 更新时间
+    is_buy_monitor: Optional[int] = None  # 是否开启买入监控
     # 可以添加表特定的方法
     def is_active(self) -> bool:
         return self.watch_status == "监听中"

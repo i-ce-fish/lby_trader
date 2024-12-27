@@ -99,19 +99,30 @@
             </el-table-column>
             <el-table-column prop='create_time' label='监听日期' width='160' sortable />
             <el-table-column prop='end_time' label='结束日期' width='160' sortable />
-            <el-table-column fixed='right' label='操作'>
+            <el-table-column fixed='right' label='操作' width='240'>
                 <template #default='scope'>
                     <el-button
+                        v-if='scope.row.watch_status === "监听中"'
+                        type='text'
+                        size='small'
+                        @click='onUpdateWatchStockBuyMonitor(scope.row)'
+                    >
+                        {{ scope.row.is_buy_monitor ? '停止买点监听' : '买点监听' }}
+                    </el-button>
+                    <el-button
+                        v-if='scope.row.watch_status !== "监听中"'
                         type='text'
                         size='small'
                         @click='handleUpdateWatchStockStatus(scope.row.id, "监听中")'
                     >继续监听</el-button>
                     <el-button
+                        v-if='scope.row.watch_status === "监听中"'
                         type='text'
                         size='small'
                         @click='handleUpdateWatchStockStatus(scope.row.id, "停止监听")'
                     >停止监听</el-button>
                     <el-button
+                        v-if='scope.row.watch_status === "监听中" || scope.row.watch_status === "停止监听"'
                         type='text'
                         size='small'
                         @click='handleUpdateWatchStockStatus(scope.row.id, "结束监听")'
@@ -156,7 +167,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted, onUnmounted, reactive, ref, defineProps, watchEffect } from 'vue'
-import { addWatchStockApi, getWatchStocksApi, IStocks, removeWatchStock, updateWatchStockStatus } from '/@/api/layout/index'
+import { addWatchStockApi, getWatchStocksApi, removeWatchStock, updateWatchStockStatus, updateWatchStockBuyMonitorApi } from '/@/api/layout/index'
 import { ElNotification, ElMessageBox, ElMessage, ElTable } from 'element-plus'
 
 
@@ -249,6 +260,11 @@ const remove = async(code: string) => {
 
 const handleUpdateWatchStockStatus = async(id: string, status: string) => {
     await updateWatchStockStatus({ id, status })
+    await loadStocks()
+}
+
+const onUpdateWatchStockBuyMonitor = async(row: any) => {
+    await updateWatchStockBuyMonitorApi({ id: row.id, is_buy_monitor: Number(!row.is_buy_monitor) })
     await loadStocks()
 }
 

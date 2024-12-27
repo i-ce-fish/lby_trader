@@ -163,7 +163,8 @@ def init_db():
             stop_time TIMESTAMP,                  -- 停止时间
             end_time TIMESTAMP,                   -- 结束时间
             create_time TIMESTAMP,                -- 创建时间
-            update_time TIMESTAMP                  -- 更新时间
+            update_time TIMESTAMP,                -- 更新时间
+            is_buy_monitor INTEGER                 -- 是否开启买点监听
         )
         """
         # db.execute("DROP TABLE IF EXISTS stock_daily_data")
@@ -719,6 +720,15 @@ def get_stock_daily_data(code: str, start_date: str, end_date: str) -> list[Stoc
         sql = "SELECT * FROM stock_daily_data WHERE code = ? AND trade_date >= ? AND trade_date <= ?"
         return db.query_to_model(sql, StockDailyData, (code, start_date, end_date))
 
+def update_watch_stock_buy_monitor(id: int, is_buy_monitor: int):
+    with SqliteDB() as db:
+        try:
+            sql = "UPDATE stock_watch SET is_buy_monitor = ? WHERE id = ?"
+            db.execute(sql, (is_buy_monitor, id))
+            return True
+        except Exception as e:
+            logging.error(f"更新股票监听买点监听失败: {e}")
+            return False
 
 if __name__ == "__main__":
      with SqliteDB() as db:

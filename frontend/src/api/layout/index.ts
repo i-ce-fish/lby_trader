@@ -10,7 +10,16 @@ const api = {
     publickey: '/api/User/Publickey',
     getWatchStocks: '/api/getWatchStocks',
     addWatchStock: '/api/addWatchStock',
-    updateWatchStockStatus: '/api/updateWatchStockStatus'
+    updateWatchStockStatus: '/api/updateWatchStockStatus',
+    updateWatchStockBuyMonitor: '/api/updateWatchStockBuyMonitor'
+}
+
+export function updateWatchStockBuyMonitorApi(data:any): Promise<AxiosResponse<any>> {
+    return request({
+        url: api.updateWatchStockBuyMonitor,
+        method: 'post',
+        data
+    })
 }
 
 export function updateWatchStockStatus(data:any): Promise<AxiosResponse<any>> {

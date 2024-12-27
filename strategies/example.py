@@ -21,28 +21,29 @@ from wx_pusher import wx_push
 class Strategy(StrategyTemplate):
     name = 'example strategy'
     # 从数据库获取监听股票
-    watch_stocks = [stock.code for stock in get_watching_stocks()]
+    watch_stocks = [stock for stock in get_watching_stocks()]
 
     def init(self):
         print(f"策略初始化时的事件处理器：{self.main_engine.event_engine.queue_size}")
-        for stock_code in self.watch_stocks:
-            self.quotation_engine.watch(stock_code)
+        for stock in self.watch_stocks:
+            self.quotation_engine.watch(stock.code)
         # 创建信号监控管理器
         self.signal_manager = SignalMonitorManager(self.log)
 
     # 更新监听股票
     def update_watch_stocks(self):
         # 取消当前股票监听
-        for stock_code in self.watch_stocks:
-            self.quotation_engine.un_watch(stock_code)
+        for stock in self.watch_stocks:
+            self.quotation_engine.un_watch(stock.code)
         # 重新查询数据库更新监听
-        self.watch_stocks = [stock.code for stock in get_watching_stocks()]
-        for stock_code in self.watch_stocks:
-            self.quotation_engine.watch(stock_code)
+        self.watch_stocks = [stock for stock in get_watching_stocks()]
+        for stock in self.watch_stocks:
+            self.quotation_engine.watch(stock.code)
 
     def on_bar(self, context: Context, data: Dict[str, DataFrame]):
         self.update_watch_stocks()
-        for stock_code in self.watch_stocks:
+        for stock in self.watch_stocks:
+            stock_code = stock.code
             ddt_df = ddt(data[stock_code])
             # 过滤出最近一个工作日00:00:00到23:59:59之间的数据
             latest_day = data[stock_code].index[-1]
@@ -75,7 +76,7 @@ class Strategy(StrategyTemplate):
             latest_data['max_price'] = max_price
            
 
-            signals = self.signal_manager.check_signals(latest_data, stock_code)
+            signals = self.signal_manager.check_signals(latest_data, stock_code, stock.is_buy_monitor)
             if len(signals)>0 :
                 latest_info = latest_data.iloc[-1]
                 signal_types = [signal[0] for signal in signals]  # 提取所有信号类型
