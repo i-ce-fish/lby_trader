@@ -25,11 +25,11 @@ def check_hyg(stock, df, end_date=None):
     # 兑现涨幅阈值(.)
     trigger_threshold = 0.1 * env_factor
     # 大阴线跌幅阈值(.)
-    big_drop_threshold = -0.05 * env_factor
+    big_drop_threshold = -0.06 * env_factor
     # 以前的最高点涨幅阈值(%)
     previous_highest_threshold = 1.05 * env_factor
     # 均线穿越窗口期
-    cross_ma_window = 3
+    cross_ma_window = 5
 
     # 过滤次新股
     if check_new(stock, df, end_date):
@@ -154,14 +154,21 @@ def check_hyg(stock, df, end_date=None):
 
 
     
-    level += 1
-    # 过滤跌破阳线均价
-    if last_close < cross_day_avg:
-        print(f"{level}. 跌破阳线均价: {last_close},{stock}")
-        logging.info(f"{level}. 跌破阳线均价: {last_close},{stock}")
-        return False
+    # level += 1
+    # # 过滤跌破阳线均价
+    # if last_close < cross_day_avg:
+    #     print(f"{level}. 跌破阳线均价: {last_close},{stock}")
+    #     logging.info(f"{level}. 跌破阳线均价: {last_close},{stock}")
+    #     return False
 
- 
+
+
+    level += 1
+    # 过滤跌破阳线开盘价
+    if last_close < cross_day_info['开盘']:
+        print(f"{level}. 跌破阳线开盘价: {last_close},{stock}")
+        logging.info(f"{level}. 跌破阳线开盘价: {last_close},{stock}")
+        return False
 
  
     level += 1
@@ -217,9 +224,10 @@ def check_hyg(stock, df, end_date=None):
                 logging.info(f"日期:{df['日期'][index]}, 值:{key[0]}{value[key[0]]}")
 
     return True
-
 def get_pattern():
-     # 定义形态识别函数字典
+    # https://github.com/HuaRongSAO/talib-document/blob/master/func_groups/pattern_recognition.md
+    # https://zhuanlan.zhihu.com/p/12576661931
+    # 定义形态识别函数字典
     pattern_funcs = {
         '两只乌鸦': talib.CDL2CROWS,
         '三只乌鸦': talib.CDL3BLACKCROWS,
