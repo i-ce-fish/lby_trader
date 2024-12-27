@@ -4079,3 +4079,314 @@ TypeError: list indices must be integers or slices, not list
 [2024-12-19 11:31:45.849595] INFO: 主引擎: 定时任务已启动
 [2024-12-19 11:31:45.849595] INFO: 主引擎: 定时任务已启动
 11
+[2024-12-20 10:23:48.092599] INFO: 主引擎: 选择了无交易模式
+[2024-12-20 10:23:48.093600] INFO: 主引擎: 启动主引擎
+[2024-12-20 10:23:48.106597] INFO: 主引擎: 定时任务已启动
+[2024-12-20 10:23:48.106597] INFO: 主引擎: 定时任务已启动
+[2024-12-20 10:23:48.942956] INFO: 主引擎: 加载策略: example
+[2024-12-20 10:23:48.942956] WARNING: 主引擎: 启用了动态加载策略功能
+[2024-12-20 10:23:48.942956] INFO: 主引擎: 选股回测日期: None
+[2024-12-20 10:23:52.611118] INFO: 主引擎: 推送消息: [开始拉升 涨停] 露笑科技: 由价格8.56在10:24:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1285601138, 'messageContentId': 1288228690, 'sendRecordId': 1285601138, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-20 10:23:53.911835] INFO: 主引擎: 推送消息: [涨停后回落] 凯淳股份: 由价格35.8在10:24:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1285601157, 'messageContentId': 1288228732, 'sendRecordId': 1285601157, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-20 10:26:10.479138] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '300105'\n"]
+[2024-12-20 13:44:15.300588] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '002404'\n"]
+[2024-12-20 13:45:20.636798] INFO: 主引擎: 推送消息: [开始拉升] 嘉欣丝绸: 由价格7.36在13:45:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1285931042, 'messageContentId': 1288496743, 'sendRecordId': 1285931042, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-20 13:46:26.910849] INFO: 主引擎: 推送消息: [买点] 宁波富邦: 由价格9.97在13:47:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1285932002, 'messageContentId': 1288498095, 'sendRecordId': 1285932002, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-20 13:48:35.034495] INFO: 主引擎: 推送消息: [买点] 龙源技术: 由价格7.86在13:49:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1285933473, 'messageContentId': 1288500463, 'sendRecordId': 1285933473, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-20 13:48:35.813308] INFO: 主引擎: 推送消息: [买点] 盈建科: 由价格25.37在13:49:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1285933488, 'messageContentId': 1288500481, 'sendRecordId': 1285933488, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-20 13:52:56.545528] INFO: 主引擎: 推送消息: [开始拉升 涨停] 凯淳股份: 由价格37.8在13:53:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1285936794, 'messageContentId': 1288505530, 'sendRecordId': 1285936794, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-20 13:56:11.745367] INFO: 主引擎: 推送消息: [结束拉升] 凯淳股份: 由价格37.2在13:56:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1285940377, 'messageContentId': 1288509365, 'sendRecordId': 1285940377, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-20 13:57:16.382356] INFO: 主引擎: 推送消息: [涨停后回落] 凯淳股份: 由价格37.03在13:57:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1285941805, 'messageContentId': 1288510723, 'sendRecordId': 1285941805, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-20 14:00:00.000747] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-20 14:00:17.145254] WARNING: 主引擎: 卸载策略: example strategy
+[2024-12-20 14:00:19.164860] INFO: 主引擎: 加载策略: example
+[2024-12-20 14:00:35.508522] INFO: 主引擎: 推送消息: [开始拉升 涨停] 露笑科技: 由价格8.56在14:01:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1285945347, 'messageContentId': 1288515839, 'sendRecordId': 1285945347, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-20 14:01:41.369815] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-20 14:08:35.403501] INFO: 主引擎: 推送消息: [买点] 盈建科: 由价格25.15在14:09:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1285957301, 'messageContentId': 1288529305, 'sendRecordId': 1285957301, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-20 14:15:00.009094] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-20 20:00:09.100158] ERROR: 主引擎: 定时任务执行失败: HTTPConnectionPool(host='wxpusher.zjiecode.com', port=80): Max retries exceeded with url: /api/send/message (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x000002AFFE5D69F0>: Failed to resolve 'wxpusher.zjiecode.com' ([Errno 11001] getaddrinfo failed)"))
+Traceback (most recent call last):
+  File "D:\dev\anaconda\Lib\site-packages\urllib3\connection.py", line 196, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dev\anaconda\Lib\site-packages\urllib3\util\connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dev\anaconda\Lib\socket.py", line 964, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\dev\anaconda\Lib\site-packages\urllib3\connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\dev\anaconda\Lib\site-packages\urllib3\connectionpool.py", line 495, in _make_request
+    conn.request(
+  File "D:\dev\anaconda\Lib\site-packages\urllib3\connection.py", line 398, in request
+    self.endheaders()
+  File "D:\dev\anaconda\Lib\http\client.py", line 1331, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "D:\dev\anaconda\Lib\http\client.py", line 1091, in _send_output
+    self.send(msg)
+  File "D:\dev\anaconda\Lib\http\client.py", line 1035, in send
+    self.connect()
+  File "D:\dev\anaconda\Lib\site-packages\urllib3\connection.py", line 236, in connect
+    self.sock = self._new_conn()
+                ^^^^^^^^^^^^^^^^
+  File "D:\dev\anaconda\Lib\site-packages\urllib3\connection.py", line 203, in _new_conn
+    raise NameResolutionError(self.host, self, e) from e
+urllib3.exceptions.NameResolutionError: <urllib3.connection.HTTPConnection object at 0x000002AFFE5D69F0>: Failed to resolve 'wxpusher.zjiecode.com' ([Errno 11001] getaddrinfo failed)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\dev\anaconda\Lib\site-packages\requests\adapters.py", line 589, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "D:\dev\anaconda\Lib\site-packages\urllib3\connectionpool.py", line 843, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "D:\dev\anaconda\Lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='wxpusher.zjiecode.com', port=80): Max retries exceeded with url: /api/send/message (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x000002AFFE5D69F0>: Failed to resolve 'wxpusher.zjiecode.com' ([Errno 11001] getaddrinfo failed)"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\project\ice_fish\pytrader\scheduler\task_scheduler.py", line 22, in update_listening_stocks_job
+    work_flow.update_listen_stocks()
+  File "D:\project\ice_fish\pytrader\work_flow.py", line 97, in update_listen_stocks
+    wx_pusher.wx_push(f'[选股] \n{hyg_msg}\n{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+  File "D:\project\ice_fish\pytrader\wx_pusher.py", line 10, in wx_push
+    response = WxPusher.send_message(msg, uids=[settings.config['push']['wxpusher_uid']],
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\binyu\AppData\Roaming\Python\Python312\site-packages\wxpusher\wxpusher.py", line 34, in send_message
+    return requests.post(url, json=payload).json()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dev\anaconda\Lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dev\anaconda\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dev\anaconda\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dev\anaconda\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dev\anaconda\Lib\site-packages\requests\adapters.py", line 622, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='wxpusher.zjiecode.com', port=80): Max retries exceeded with url: /api/send/message (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x000002AFFE5D69F0>: Failed to resolve 'wxpusher.zjiecode.com' ([Errno 11001] getaddrinfo failed)"))
+[2024-12-20 20:01:00.768323] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '301428'\n"]
+[2024-12-23 10:03:51.137071] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '002730'\n"]
+[2024-12-23 10:05:01.912709] INFO: 主引擎: 推送消息: [开始拉升 涨停] 电光科技: 由价格9.8在10:05:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289821771, 'messageContentId': 1292966316, 'sendRecordId': 1289821771, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:06:11.810686] INFO: 主引擎: 推送消息: [卖点] 电光科技: 由价格9.8在10:07:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289824892, 'messageContentId': 1292967972, 'sendRecordId': 1289824892, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:06:12.566422] INFO: 主引擎: 推送消息: [买点] 明阳电路: 由价格17.75在10:07:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289824900, 'messageContentId': 1292967984, 'sendRecordId': 1289824900, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:08:31.523510] INFO: 主引擎: 推送消息: [买点] 嘉欣丝绸: 由价格6.78在10:09:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289829750, 'messageContentId': 1292970876, 'sendRecordId': 1289829750, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:08:34.379845] INFO: 主引擎: 推送消息: [开始拉升] 利通电子: 由价格21.95在10:09:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289829821, 'messageContentId': 1292970960, 'sendRecordId': 1289829821, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:10:54.126405] INFO: 主引擎: 推送消息: [买点] 金信诺: 由价格10.47在10:11:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289834478, 'messageContentId': 1292974159, 'sendRecordId': 1289834478, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:10:56.383456] INFO: 主引擎: 推送消息: [结束拉升] 利通电子: 由价格21.6在10:11:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289834507, 'messageContentId': 1292974199, 'sendRecordId': 1289834507, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:12:07.355789] INFO: 主引擎: 推送消息: [买点] 宁波富邦: 由价格9.51在10:12:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289836832, 'messageContentId': 1292975630, 'sendRecordId': 1289836832, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:13:16.882978] INFO: 主引擎: 推送消息: [买点] 凯淳股份: 由价格32.6在10:13:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289839555, 'messageContentId': 1292977162, 'sendRecordId': 1289839555, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:13:17.791264] INFO: 主引擎: 推送消息: [买点] 申达股份: 由价格4.27在10:14:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289839563, 'messageContentId': 1292977177, 'sendRecordId': 1289839563, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:22:42.161144] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '600789'\n"]
+[2024-12-23 10:23:52.743672] INFO: 主引擎: 推送消息: [开始拉升] 鲁抗医药: 由价格10.12在10:24:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289860935, 'messageContentId': 1292991277, 'sendRecordId': 1289860935, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:25:02.500428] INFO: 主引擎: 推送消息: [结束拉升] 鲁抗医药: 由价格10.02在10:25:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289863253, 'messageContentId': 1292993017, 'sendRecordId': 1289863253, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:29:43.099015] INFO: 主引擎: 推送消息: [买点] 金信诺: 由价格10.43在10:30:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289869994, 'messageContentId': 1292999542, 'sendRecordId': 1289869994, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:29:43.671800] INFO: 主引擎: 推送消息: [买点] 明阳电路: 由价格17.47在10:30:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289870010, 'messageContentId': 1292999557, 'sendRecordId': 1289870010, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:32:02.915996] INFO: 主引擎: 推送消息: [买点] 龙源技术: 由价格7.62在10:32:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289874043, 'messageContentId': 1293003220, 'sendRecordId': 1289874043, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:32:03.307560] INFO: 主引擎: 推送消息: [买点] 中建环能: 由价格6.03在10:32:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289874117, 'messageContentId': 1293003229, 'sendRecordId': 1289874117, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:33:14.723932] INFO: 主引擎: 推送消息: [买点] 世纪恒通: 由价格37.28在10:33:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289877372, 'messageContentId': 1293004968, 'sendRecordId': 1289877372, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 10:42:52.212376] INFO: 主引擎: 推送消息: [买点] 盈建科: 由价格23.84在10:43:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1289897412, 'messageContentId': 1293017186, 'sendRecordId': 1289897412, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 11:53:43.807519] INFO: 主引擎: 推送消息: [开始拉升] 龙源技术: 由价格8.28在11:30:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1290026861, 'messageContentId': 1293109144, 'sendRecordId': 1290026861, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 11:53:44.127574] INFO: 主引擎: 推送消息: [买点] 金信诺: 由价格10.2在11:30:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1290026864, 'messageContentId': 1293109151, 'sendRecordId': 1290026864, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 11:55:45.508270] DEBUG: 主引擎: 开始关闭进程...
+[2024-12-23 11:55:46.024917] DEBUG: 主引擎: 开始关闭策略...
+[2024-12-23 11:55:46.024917] INFO: 主引擎: shutdown
+[2024-12-23 11:55:46.024917] INFO: 主引擎: shutdown
+[2024-12-23 11:55:46.126094] INFO: 主引擎: 定时任务进程已停止
+[2024-12-23 14:20:03.941759] INFO: 主引擎: 选择了无交易模式
+[2024-12-23 14:20:03.942760] INFO: 主引擎: 启动主引擎
+[2024-12-23 14:20:03.955314] INFO: 主引擎: 定时任务已启动
+[2024-12-23 14:20:03.955328] INFO: 主引擎: 定时任务已启动
+[2024-12-23 14:20:04.765636] INFO: 主引擎: 加载策略: example
+[2024-12-23 14:20:04.765636] WARNING: 主引擎: 启用了动态加载策略功能
+[2024-12-23 14:20:04.765636] INFO: 主引擎: 选股回测日期: None
+[2024-12-23 14:20:09.045039] INFO: 主引擎: 推送消息: [涨停] 露笑科技: 由价格9.41在14:20:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1290216965, 'messageContentId': 1293315601, 'sendRecordId': 1290216965, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 14:20:09.395869] INFO: 主引擎: 推送消息: [开始拉升 涨停] 电光科技: 由价格9.8在14:21:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1290216976, 'messageContentId': 1293315615, 'sendRecordId': 1290216976, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 14:22:19.599122] INFO: 主引擎: 推送消息: [买点] 嘉欣丝绸: 由价格6.96在14:23:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1290219686, 'messageContentId': 1293318633, 'sendRecordId': 1290219686, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 14:38:49.697366] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '002929'\n"]
+[2024-12-23 14:40:58.856471] INFO: 主引擎: 推送消息: [涨停后回落] 露笑科技: 由价格9.25在14:41:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1290257352, 'messageContentId': 1293344812, 'sendRecordId': 1290257352, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 14:42:38.179475] INFO: 主引擎: 选择了无交易模式
+[2024-12-23 14:42:38.180478] INFO: 主引擎: 启动主引擎
+[2024-12-23 14:42:38.183477] INFO: 主引擎: 定时任务已启动
+[2024-12-23 14:42:38.183477] INFO: 主引擎: 定时任务已启动
+[2024-12-23 14:42:38.659552] INFO: 主引擎: 加载策略: example
+[2024-12-23 14:42:38.659552] WARNING: 主引擎: 启用了动态加载策略功能
+[2024-12-23 14:42:38.660556] INFO: 主引擎: 选股回测日期: None
+[2024-12-23 14:42:59.225188] DEBUG: 主引擎: 开始关闭进程...
+[2024-12-23 14:43:00.210768] DEBUG: 主引擎: 开始关闭进程...
+[2024-12-23 14:47:44.652887] INFO: 主引擎: 选择了无交易模式
+[2024-12-23 14:47:44.653889] INFO: 主引擎: 启动主引擎
+[2024-12-23 14:47:44.656890] INFO: 主引擎: 定时任务已启动
+[2024-12-23 14:47:44.656890] INFO: 主引擎: 定时任务已启动
+[2024-12-23 14:47:45.102842] INFO: 主引擎: 加载策略: example
+[2024-12-23 14:47:45.102842] WARNING: 主引擎: 启用了动态加载策略功能
+[2024-12-23 14:47:45.103843] INFO: 主引擎: 选股回测日期: None
+[2024-12-23 14:47:48.940922] INFO: 主引擎: 推送消息: [涨停后回落] 露笑科技: 由价格9.21在14:48:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1290266482, 'messageContentId': 1293353747, 'sendRecordId': 1290266482, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-23 14:50:00.010780] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-23 14:51:45.076346] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-23 14:52:07.974885] INFO: 主引擎: 推送消息: [涨停] 露笑科技: 由价格9.42在14:52:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1290272621, 'messageContentId': 1293359742, 'sendRecordId': 1290272621, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-24 09:44:00.416833] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '002038'\n"]
+[2024-12-24 09:45:09.060335] INFO: 主引擎: 推送消息: [开始拉升 涨停] 京运通: 由价格3.78在09:45:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1291359320, 'messageContentId': 1294699676, 'sendRecordId': 1291359320, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-24 09:48:26.011172] INFO: 主引擎: 推送消息: [结束拉升] 京运通: 由价格3.78在09:49:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1291365085, 'messageContentId': 1294703158, 'sendRecordId': 1291365085, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-24 09:52:48.660604] INFO: 主引擎: 推送消息: [开始拉升] 中建环能: 由价格6.73在09:53:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1291371545, 'messageContentId': 1294708027, 'sendRecordId': 1291371545, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-24 10:20:59.148135] INFO: 主引擎: 推送消息: [卖点] 京运通: 由价格3.78在10:21:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1291432507, 'messageContentId': 1294747465, 'sendRecordId': 1291432507, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-24 10:34:03.375028] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '300040'\n"]
+[2024-12-24 10:35:11.951224] INFO: 主引擎: 推送消息: [开始拉升 涨停] 九洲集团: 由价格8.26在10:36:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1291462317, 'messageContentId': 1294764756, 'sendRecordId': 1291462317, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-24 10:35:13.062284] INFO: 主引擎: 推送消息: [涨停] 宁夏建材: 由价格15.47在10:36:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1291462328, 'messageContentId': 1294764777, 'sendRecordId': 1291462328, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-24 10:37:28.726032] INFO: 主引擎: 推送消息: [卖点] 九洲集团: 由价格8.26在10:38:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1291465534, 'messageContentId': 1294767188, 'sendRecordId': 1291465534, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-24 10:37:29.784731] INFO: 主引擎: 推送消息: [卖点] 宁夏建材: 由价格15.47在10:38:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1291465556, 'messageContentId': 1294767213, 'sendRecordId': 1291465556, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-24 10:43:03.217857] INFO: 主引擎: 推送消息: [涨停后回落] 宁夏建材: 由价格15.22在10:43:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1291475710, 'messageContentId': 1294772925, 'sendRecordId': 1291475710, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-24 11:24:09.175504] INFO: 主引擎: 推送消息: [开始拉升] 金信诺: 由价格10.31在11:25:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1291551408, 'messageContentId': 1294821271, 'sendRecordId': 1291551408, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-24 12:00:00.010523] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-24 12:02:03.889866] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-24 12:15:00.019390] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-24 12:18:00.541243] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-24 12:45:00.010930] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-24 13:57:12.203671] INFO: 主引擎: 选择了无交易模式
+[2024-12-24 13:57:12.212188] INFO: 主引擎: 启动主引擎
+[2024-12-24 13:57:12.227326] INFO: 主引擎: 定时任务已启动
+[2024-12-24 13:57:12.227326] INFO: 主引擎: 定时任务已启动
+[2024-12-24 13:57:13.084208] INFO: 主引擎: 加载策略: example
+[2024-12-24 13:57:13.084208] WARNING: 主引擎: 启用了动态加载策略功能
+[2024-12-24 13:57:13.084734] INFO: 主引擎: 选股回测日期: None
+[2024-12-24 13:57:20.606441] INFO: 主引擎: 推送消息: [开始拉升 涨停] 九洲集团: 由价格8.26在13:58:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1291788549, 'messageContentId': 1294990805, 'sendRecordId': 1291788549, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-24 13:57:21.815030] INFO: 主引擎: 推送消息: [涨停后回落] 宁夏建材: 由价格14.78在13:58:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1291788561, 'messageContentId': 1294990819, 'sendRecordId': 1291788561, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-24 13:57:22.159900] INFO: 主引擎: 推送消息: [涨停] 京运通: 由价格3.78在13:58:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1291788565, 'messageContentId': 1294990824, 'sendRecordId': 1291788565, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-24 14:00:00.002507] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-24 14:01:48.479348] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-24 14:15:00.007000] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-24 14:16:50.948437] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-24 14:45:00.001777] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-24 14:46:52.759832] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-24 14:47:23.649462] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '605598'\n"]
+[2024-12-24 14:48:30.365163] INFO: 主引擎: 推送消息: [涨停] 上海港湾: 由价格22.29在14:49:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1291864697, 'messageContentId': 1295049880, 'sendRecordId': 1291864697, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-24 14:50:00.009442] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-24 14:51:42.200540] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-25 10:48:49.811245] INFO: 主引擎: 推送消息: [开始拉升] 高澜股份: 由价格23.18在10:49:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1293080555, 'messageContentId': 1296228040, 'sendRecordId': 1293080555, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-25 10:48:50.518682] INFO: 主引擎: 推送消息: [涨停后回落] 京运通: 由价格3.93在10:49:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1293080579, 'messageContentId': 1296228055, 'sendRecordId': 1293080579, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-25 10:51:23.128919] INFO: 主引擎: 推送消息: [结束拉升] 高澜股份: 由价格23.04在10:51:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1293084286, 'messageContentId': 1296231612, 'sendRecordId': 1293084286, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-25 10:53:38.827426] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '301399'\n"]
+[2024-12-26 09:50:46.309448] INFO: 主引擎: 推送消息: [开始拉升] 露笑科技: 由价格8.59在09:51:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294499938, 'messageContentId': 1297546819, 'sendRecordId': 1294499938, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 09:50:47.190030] INFO: 主引擎: 推送消息: [开始拉升 涨停后回落] 金信诺: 由价格11.55在09:51:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294500032, 'messageContentId': 1297546833, 'sendRecordId': 1294500032, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 09:50:47.955090] INFO: 主引擎: 推送消息: [开始拉升] 高澜股份: 由价格22.68在09:51:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294500113, 'messageContentId': 1297546845, 'sendRecordId': 1294500113, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 09:52:01.727365] INFO: 主引擎: 推送消息: [结束拉升] 露笑科技: 由价格8.69在09:52:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294502991, 'messageContentId': 1297548339, 'sendRecordId': 1294502991, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 09:53:10.620117] INFO: 主引擎: 推送消息: [结束拉升] 金信诺: 由价格11.5在09:53:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294504731, 'messageContentId': 1297549476, 'sendRecordId': 1294504731, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 09:53:11.510878] INFO: 主引擎: 推送消息: [开始拉升] 高澜股份: 由价格23.2在09:53:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294504737, 'messageContentId': 1297549488, 'sendRecordId': 1294504737, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 09:54:17.345166] INFO: 主引擎: 推送消息: [卖点] 露笑科技: 由价格8.66在09:55:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294506923, 'messageContentId': 1297550630, 'sendRecordId': 1294506923, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 09:55:26.189922] INFO: 主引擎: 推送消息: [结束拉升] 高澜股份: 由价格23.2在09:56:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294509510, 'messageContentId': 1297552082, 'sendRecordId': 1294509510, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 09:57:41.886271] INFO: 主引擎: 推送消息: [涨停] 金信诺: 由价格12.28在09:58:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294515821, 'messageContentId': 1297554524, 'sendRecordId': 1294515821, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 10:19:23.665008] INFO: 主引擎: 推送消息: [涨停] 露笑科技: 由价格8.91在10:20:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294592068, 'messageContentId': 1297583232, 'sendRecordId': 1294592068, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 10:26:15.813893] INFO: 主引擎: 推送消息: [卖点] 金信诺: 由价格12.28在10:27:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294609781, 'messageContentId': 1297591774, 'sendRecordId': 1294609781, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 10:37:35.383033] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '300824'\n"]
+[2024-12-26 10:42:10.264102] INFO: 主引擎: 推送消息: [开始拉升] 高澜股份: 由价格24.24在10:42:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294643577, 'messageContentId': 1297610320, 'sendRecordId': 1294643577, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 10:50:12.229687] INFO: 主引擎: 推送消息: [开始拉升] 露笑科技: 由价格8.91在10:50:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294655480, 'messageContentId': 1297618486, 'sendRecordId': 1294655480, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 13:01:29.855473] INFO: 主引擎: 推送消息: [开始拉升] 利通电子: 由价格23.18在13:02:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294842803, 'messageContentId': 1297759557, 'sendRecordId': 1294842803, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 13:03:46.208113] INFO: 主引擎: 推送消息: [结束拉升] 利通电子: 由价格22.7在13:04:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294846351, 'messageContentId': 1297762460, 'sendRecordId': 1294846351, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 13:07:10.216796] INFO: 主引擎: 推送消息: [开始拉升] 利通电子: 由价格22.8在13:07:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294849286, 'messageContentId': 1297766074, 'sendRecordId': 1294849286, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 13:38:53.500576] INFO: 主引擎: 推送消息: [开始拉升] 中建环能: 由价格7.04在13:39:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294892510, 'messageContentId': 1297795942, 'sendRecordId': 1294892510, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-26 13:40:01.058319] INFO: 主引擎: 推送消息: [结束拉升] 中建环能: 由价格6.95在13:40:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1294893663, 'messageContentId': 1297796946, 'sendRecordId': 1294893663, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-27 09:03:05.294961] INFO: 主引擎: 选择了无交易模式
+[2024-12-27 09:03:05.295961] INFO: 主引擎: 启动主引擎
+[2024-12-27 09:03:05.307019] INFO: 主引擎: 定时任务已启动
+[2024-12-27 09:03:05.307019] INFO: 主引擎: 定时任务已启动
+[2024-12-27 09:03:06.418213] INFO: 主引擎: 加载策略: example
+[2024-12-27 09:03:06.418213] WARNING: 主引擎: 启用了动态加载策略功能
+[2024-12-27 09:03:06.419209] INFO: 主引擎: 选股回测日期: None
+[2024-12-27 09:03:31.945170] INFO: 主引擎: 推送消息: [涨停] 露笑科技: 由价格8.91在15:00:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1295980301, 'messageContentId': 1298940383, 'sendRecordId': 1295980301, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-27 09:03:32.949106] INFO: 主引擎: 推送消息: [涨停] 金信诺: 由价格12.28在15:00:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1295980326, 'messageContentId': 1298940417, 'sendRecordId': 1295980326, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-27 09:06:49.195153] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 46, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '000913'\n"]
+[2024-12-27 09:15:00.014811] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-27 09:16:27.830445] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-27 09:21:51.354618] WARNING: 主引擎: 卸载策略: example strategy
+[2024-12-27 09:21:53.364167] INFO: 主引擎: 加载策略: example
+[2024-12-27 09:23:31.665765] WARNING: 主引擎: 卸载策略: example strategy
+[2024-12-27 09:23:33.670538] INFO: 主引擎: 加载策略: example
+[2024-12-27 09:24:25.691739] WARNING: 主引擎: 卸载策略: example strategy
+[2024-12-27 09:24:27.703252] INFO: 主引擎: 加载策略: example
+[2024-12-27 09:25:43.742944] INFO: 主引擎: 选择了无交易模式
+[2024-12-27 09:25:43.746946] INFO: 主引擎: 启动主引擎
+[2024-12-27 09:25:43.756945] INFO: 主引擎: 定时任务已启动
+[2024-12-27 09:25:43.757946] INFO: 主引擎: 定时任务已启动
+[2024-12-27 09:25:45.414181] INFO: 主引擎: 加载策略: example
+[2024-12-27 09:25:45.414181] WARNING: 主引擎: 启用了动态加载策略功能
+[2024-12-27 09:25:45.415173] INFO: 主引擎: 选股回测日期: None
+[2024-12-27 09:28:43.641264] DEBUG: 主引擎: 开始关闭进程...
+[2024-12-27 09:28:43.807037] DEBUG: 主引擎: 开始关闭策略...
+[2024-12-27 09:28:43.807037] INFO: 主引擎: shutdown
+[2024-12-27 09:28:43.807558] INFO: 主引擎: shutdown
+[2024-12-27 09:28:43.807558] INFO: 主引擎: shutdown
+[2024-12-27 09:28:43.807558] INFO: 主引擎: shutdown
+[2024-12-27 09:28:43.851805] DEBUG: 主引擎: 开始关闭进程...
+[2024-12-27 09:28:43.851805] DEBUG: 主引擎: 开始关闭策略...
+[2024-12-27 09:28:43.852326] INFO: 主引擎: shutdown
+[2024-12-27 09:28:43.852345] INFO: 主引擎: shutdown
+[2024-12-27 09:28:43.852345] INFO: 主引擎: shutdown
+[2024-12-27 09:28:43.852345] INFO: 主引擎: shutdown
+[2024-12-27 09:28:43.952762] INFO: 主引擎: 定时任务进程已停止
+[2024-12-27 09:29:34.865507] INFO: 主引擎: 选择了无交易模式
+[2024-12-27 09:29:34.866053] INFO: 主引擎: 启动主引擎
+[2024-12-27 09:29:34.870339] INFO: 主引擎: 定时任务已启动
+[2024-12-27 09:29:34.870339] INFO: 主引擎: 定时任务已启动
+[2024-12-27 09:29:35.344374] INFO: 主引擎: 加载策略: example
+[2024-12-27 09:29:35.345374] WARNING: 主引擎: 启用了动态加载策略功能
+[2024-12-27 09:29:35.345374] INFO: 主引擎: 选股回测日期: None
+[2024-12-27 09:38:24.218450] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 47, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '603633'\n"]
+[2024-12-27 09:45:00.013695] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-27 09:46:52.131931] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-27 09:50:00.005555] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-27 09:51:45.891470] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-27 10:00:00.009938] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-27 10:01:55.909635] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-27 10:02:40.856348] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 47, in on_bar\n    ddt_df = ddt(data[stock_code])\n                 ~~~~^^^^^^^^^^^^\n', "KeyError: '002952'\n"]
+[2024-12-27 10:03:46.922807] INFO: 主引擎: 推送消息: [开始拉升 涨停] 亚世光电: 由价格28.5在10:04:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1296115479, 'messageContentId': 1299007584, 'sendRecordId': 1296115479, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-27 10:04:53.688364] INFO: 主引擎: 推送消息: [买点] 徕木股份: 由价格8.67在10:05:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1296120024, 'messageContentId': 1299009107, 'sendRecordId': 1296120024, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-27 10:06:00.020333] INFO: 主引擎: 推送消息: [买点] 上海港湾: 由价格21.84在10:06:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1296123533, 'messageContentId': 1299010631, 'sendRecordId': 1296123533, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-27 10:07:57.484740] WARNING: 主引擎: 卸载策略: example strategy
+[2024-12-27 10:07:59.489498] INFO: 主引擎: 加载策略: example
+[2024-12-27 10:08:14.064149] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 79, in on_bar\n    signals = self.signal_manager.check_signals(latest_data, stock_code, stock.is_buy_monitor)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', 'TypeError: SignalMonitorManager.check_signals() takes 3 positional arguments but 4 were given\n']
+[2024-12-27 10:08:49.509267] WARNING: 主引擎: 卸载策略: example strategy
+[2024-12-27 10:08:51.514209] INFO: 主引擎: 加载策略: example
+[2024-12-27 10:09:01.517857] WARNING: 主引擎: 卸载策略: example strategy
+[2024-12-27 10:09:03.523048] INFO: 主引擎: 加载策略: example
+[2024-12-27 10:09:09.525915] WARNING: 主引擎: 卸载策略: example strategy
+[2024-12-27 10:09:11.532750] INFO: 主引擎: 加载策略: example
+[2024-12-27 10:09:34.522660] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 79, in on_bar\n    signals = self.signal_manager.check_signals(latest_data, stock_code, stock.is_buy_monitor)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', 'TypeError: SignalMonitorManager.check_signals() takes 3 positional arguments but 4 were given\n']
+[2024-12-27 10:09:34.614161] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 79, in on_bar\n    signals = self.signal_manager.check_signals(latest_data, stock_code, stock.is_buy_monitor)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', 'TypeError: SignalMonitorManager.check_signals() takes 3 positional arguments but 4 were given\n']
+[2024-12-27 10:09:34.704180] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 79, in on_bar\n    signals = self.signal_manager.check_signals(latest_data, stock_code, stock.is_buy_monitor)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', 'TypeError: SignalMonitorManager.check_signals() takes 3 positional arguments but 4 were given\n']
+[2024-12-27 10:09:34.796959] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 79, in on_bar\n    signals = self.signal_manager.check_signals(latest_data, stock_code, stock.is_buy_monitor)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', 'TypeError: SignalMonitorManager.check_signals() takes 3 positional arguments but 4 were given\n']
+[2024-12-27 10:10:56.328902] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 79, in on_bar\n    signals = self.signal_manager.check_signals(latest_data, stock_code, stock.is_buy_monitor)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', 'TypeError: SignalMonitorManager.check_signals() takes 3 positional arguments but 4 were given\n']
+[2024-12-27 10:10:56.408849] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 79, in on_bar\n    signals = self.signal_manager.check_signals(latest_data, stock_code, stock.is_buy_monitor)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', 'TypeError: SignalMonitorManager.check_signals() takes 3 positional arguments but 4 were given\n']
+[2024-12-27 10:10:56.488616] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 79, in on_bar\n    signals = self.signal_manager.check_signals(latest_data, stock_code, stock.is_buy_monitor)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', 'TypeError: SignalMonitorManager.check_signals() takes 3 positional arguments but 4 were given\n']
+[2024-12-27 10:10:56.566662] ERROR: 主引擎: ['Traceback (most recent call last):\n', '  File "D:\\project\\ice_fish\\pytrader\\easyquant\\strategy\\strategyTemplate.py", line 71, in run\n    self.on_bar(self._context, event.data)\n', '  File "D:\\project\\ice_fish\\pytrader\\strategies\\example.py", line 79, in on_bar\n    signals = self.signal_manager.check_signals(latest_data, stock_code, stock.is_buy_monitor)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', 'TypeError: SignalMonitorManager.check_signals() takes 3 positional arguments but 4 were given\n']
+[2024-12-27 10:11:45.256634] DEBUG: 主引擎: 开始关闭进程...
+[2024-12-27 10:11:45.813247] DEBUG: 主引擎: 开始关闭进程...
+[2024-12-27 10:11:57.142132] INFO: 主引擎: 选择了无交易模式
+[2024-12-27 10:11:57.143128] INFO: 主引擎: 启动主引擎
+[2024-12-27 10:11:57.146128] INFO: 主引擎: 定时任务已启动
+[2024-12-27 10:11:57.146128] INFO: 主引擎: 定时任务已启动
+[2024-12-27 10:11:57.582797] INFO: 主引擎: 加载策略: example
+[2024-12-27 10:11:57.582797] WARNING: 主引擎: 启用了动态加载策略功能
+[2024-12-27 10:11:57.582797] INFO: 主引擎: 选股回测日期: None
+[2024-12-27 10:12:03.196735] INFO: 主引擎: 推送消息: [开始拉升 涨停] 亚世光电: 由价格28.5在10:12:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1296139177, 'messageContentId': 1299018219, 'sendRecordId': 1296139177, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-27 10:15:00.013006] INFO: 主引擎: 开始执行更新监听股票的任务
+[2024-12-27 10:15:27.366918] INFO: 主引擎: 推送消息: [买点] 徕木股份: 由价格8.63在10:16:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1296147456, 'messageContentId': 1299022499, 'sendRecordId': 1296147456, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-27 10:17:01.007228] INFO: 主引擎: 更新监听股票的任务执行完成
+[2024-12-27 10:20:57.689039] INFO: 主引擎: 推送消息: [卖点] 亚世光电: 由价格28.5在10:21:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1296164444, 'messageContentId': 1299029449, 'sendRecordId': 1296164444, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
+[2024-12-27 10:22:03.555797] INFO: 主引擎: 推送消息: [买点] 英特科技: 由价格26.32在10:22:00触发==>>>{'code': 1000, 'msg': '处理成功', 'data': [{'spt': None, 'uid': 'UID_T8KlGW8JS3efxTMIvGLjGrpER7LX', 'topicId': None, 'messageId': 1296166787, 'messageContentId': 1299030849, 'sendRecordId': 1296166787, 'code': 1000, 'status': '创建发送任务成功'}], 'success': True}
